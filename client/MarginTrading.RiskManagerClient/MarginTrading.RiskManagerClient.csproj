@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>MarginTrading.RiskManagerClient</AssemblyName>
+    <RootNamespace>MarginTrading.RiskManagerClient</RootNamespace>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>Lykke.MarginTrading.RiskManagerClient</PackageId>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <Authors>Nuno Araujo</Authors>
+    <Company>Lykke</Company>
+    <Description />
+    <Version>1.0.1</Version>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>bin\Release\netstandard2.0\MarginTrading.MarketMakerClient.xml</DocumentationFile>
+    <LangVersion>7.1</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Rest.ClientRuntime" Version="2.3.10" />
+  </ItemGroup>
+
+</Project>
