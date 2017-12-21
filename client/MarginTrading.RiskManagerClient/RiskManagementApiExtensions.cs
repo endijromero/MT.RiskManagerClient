@@ -15,6 +15,9 @@ namespace MarginTrading.RiskManagerClient
     /// </summary>
     public static partial class RiskManagementApiExtensions
     {
+            /// <summary>
+            /// Returns list of individual assets
+            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
@@ -26,6 +29,9 @@ namespace MarginTrading.RiskManagerClient
                 return operations.ApiAssetsGetAsync(apiKey).GetAwaiter().GetResult();
             }
 
+            /// <summary>
+            /// Returns list of individual assets
+            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
@@ -43,17 +49,25 @@ namespace MarginTrading.RiskManagerClient
                 }
             }
 
+            /// <summary>
+            /// Retrieve current state of correlation coefficient cache which is used for
+            /// calculation - with live and overriden parameters
+            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
             /// <param name='apiKey'>
             /// API Token
             /// </param>
-            public static IList<CorrCoeff> ApiCorrCoeffGet(this IRiskManagementApi operations, string apiKey)
+            public static IList<CorrCoeffResponse> ApiCorrCoeffGet(this IRiskManagementApi operations, string apiKey)
             {
                 return operations.ApiCorrCoeffGetAsync(apiKey).GetAwaiter().GetResult();
             }
 
+            /// <summary>
+            /// Retrieve current state of correlation coefficient cache which is used for
+            /// calculation - with live and overriden parameters
+            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
@@ -63,7 +77,7 @@ namespace MarginTrading.RiskManagerClient
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<IList<CorrCoeff>> ApiCorrCoeffGetAsync(this IRiskManagementApi operations, string apiKey, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<IList<CorrCoeffResponse>> ApiCorrCoeffGetAsync(this IRiskManagementApi operations, string apiKey, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.ApiCorrCoeffGetWithHttpMessagesAsync(apiKey, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -71,6 +85,9 @@ namespace MarginTrading.RiskManagerClient
                 }
             }
 
+            /// <summary>
+            /// Override a coefficient
+            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
@@ -78,12 +95,16 @@ namespace MarginTrading.RiskManagerClient
             /// API Token
             /// </param>
             /// <param name='model'>
+            /// Collection of overriding coefficients
             /// </param>
             public static void ApiCorrCoeffPost(this IRiskManagementApi operations, string apiKey, IList<CorrCoeffOverrideModel> model = default(IList<CorrCoeffOverrideModel>))
             {
                 operations.ApiCorrCoeffPostAsync(apiKey, model).GetAwaiter().GetResult();
             }
 
+            /// <summary>
+            /// Override a coefficient
+            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
@@ -91,6 +112,7 @@ namespace MarginTrading.RiskManagerClient
             /// API Token
             /// </param>
             /// <param name='model'>
+            /// Collection of overriding coefficients
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
@@ -100,6 +122,9 @@ namespace MarginTrading.RiskManagerClient
                 (await operations.ApiCorrCoeffPostWithHttpMessagesAsync(apiKey, model, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
 
+            /// <summary>
+            /// Cancel overriding of a coefficient with given coordinates
+            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
@@ -107,14 +132,19 @@ namespace MarginTrading.RiskManagerClient
             /// API Token
             /// </param>
             /// <param name='assetX'>
+            /// X coordinate in correlation matrix
             /// </param>
             /// <param name='assetY'>
+            /// Y coordinate in correlation matrix
             /// </param>
             public static void ApiCorrCoeffDelete(this IRiskManagementApi operations, string apiKey, string assetX = default(string), string assetY = default(string))
             {
                 operations.ApiCorrCoeffDeleteAsync(apiKey, assetX, assetY).GetAwaiter().GetResult();
             }
 
+            /// <summary>
+            /// Cancel overriding of a coefficient with given coordinates
+            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
@@ -122,8 +152,10 @@ namespace MarginTrading.RiskManagerClient
             /// API Token
             /// </param>
             /// <param name='assetX'>
+            /// X coordinate in correlation matrix
             /// </param>
             /// <param name='assetY'>
+            /// Y coordinate in correlation matrix
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
@@ -133,6 +165,9 @@ namespace MarginTrading.RiskManagerClient
                 (await operations.ApiCorrCoeffDeleteWithHttpMessagesAsync(apiKey, assetX, assetY, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
 
+            /// <summary>
+            /// Returns execution state and version of running service
+            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
@@ -141,6 +176,9 @@ namespace MarginTrading.RiskManagerClient
                 operations.ApiIsaliveGetAsync().GetAwaiter().GetResult();
             }
 
+            /// <summary>
+            /// Returns execution state and version of running service
+            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
@@ -152,34 +190,11 @@ namespace MarginTrading.RiskManagerClient
                 (await operations.ApiIsaliveGetWithHttpMessagesAsync(null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
 
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='apiKey'>
-            /// API Token
-            /// </param>
-            public static IList<IVaRMonitor> ApiIvarlimitGet(this IRiskManagementApi operations, string apiKey)
-            {
-                return operations.ApiIvarlimitGetAsync(apiKey).GetAwaiter().GetResult();
-            }
-
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='apiKey'>
-            /// API Token
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task<IList<IVaRMonitor>> ApiIvarlimitGetAsync(this IRiskManagementApi operations, string apiKey, CancellationToken cancellationToken = default(CancellationToken))
-            {
-                using (var _result = await operations.ApiIvarlimitGetWithHttpMessagesAsync(apiKey, null, cancellationToken).ConfigureAwait(false))
-                {
-                    return _result.Body;
-                }
-            }
-
+            /// <summary>
+            /// Sets a collection of limits
+            /// If a limit in collection exists, it will be overwritten
+            /// If does not exist, new will be created
+            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
@@ -187,12 +202,18 @@ namespace MarginTrading.RiskManagerClient
             /// API Token
             /// </param>
             /// <param name='model'>
+            /// Collection of limit objects
             /// </param>
-            public static void ApiIvarlimitPost(this IRiskManagementApi operations, string apiKey, IList<IVaRLimit> model = default(IList<IVaRLimit>))
+            public static void ApiIvarlimitPost(this IRiskManagementApi operations, string apiKey, IList<IVaRLimitModel> model = default(IList<IVaRLimitModel>))
             {
                 operations.ApiIvarlimitPostAsync(apiKey, model).GetAwaiter().GetResult();
             }
 
+            /// <summary>
+            /// Sets a collection of limits
+            /// If a limit in collection exists, it will be overwritten
+            /// If does not exist, new will be created
+            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
@@ -200,15 +221,20 @@ namespace MarginTrading.RiskManagerClient
             /// API Token
             /// </param>
             /// <param name='model'>
+            /// Collection of limit objects
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task ApiIvarlimitPostAsync(this IRiskManagementApi operations, string apiKey, IList<IVaRLimit> model = default(IList<IVaRLimit>), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task ApiIvarlimitPostAsync(this IRiskManagementApi operations, string apiKey, IList<IVaRLimitModel> model = default(IList<IVaRLimitModel>), CancellationToken cancellationToken = default(CancellationToken))
             {
                 (await operations.ApiIvarlimitPostWithHttpMessagesAsync(apiKey, model, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
 
+            /// <summary>
+            /// Removes limit and monitor for given parameters if exists, does nothing
+            /// otherwise
+            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
@@ -216,14 +242,20 @@ namespace MarginTrading.RiskManagerClient
             /// API Token
             /// </param>
             /// <param name='counterPartyId'>
+            /// trader/maker identification
             /// </param>
             /// <param name='assetId'>
+            /// asset on which the limit is applied
             /// </param>
             public static void ApiIvarlimitDelete(this IRiskManagementApi operations, string apiKey, string counterPartyId = default(string), string assetId = default(string))
             {
                 operations.ApiIvarlimitDeleteAsync(apiKey, counterPartyId, assetId).GetAwaiter().GetResult();
             }
 
+            /// <summary>
+            /// Removes limit and monitor for given parameters if exists, does nothing
+            /// otherwise
+            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
@@ -231,8 +263,10 @@ namespace MarginTrading.RiskManagerClient
             /// API Token
             /// </param>
             /// <param name='counterPartyId'>
+            /// trader/maker identification
             /// </param>
             /// <param name='assetId'>
+            /// asset on which the limit is applied
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
@@ -242,17 +276,67 @@ namespace MarginTrading.RiskManagerClient
                 (await operations.ApiIvarlimitDeleteWithHttpMessagesAsync(apiKey, counterPartyId, assetId, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
 
+            /// <summary>
+            /// Retrieves current state of concrete limit monitor.
+            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
             /// <param name='apiKey'>
             /// API Token
             /// </param>
-            public static IList<MeanCoeff> ApiMeanGet(this IRiskManagementApi operations, string apiKey)
+            /// <param name='counterparty'>
+            /// </param>
+            /// <param name='asset'>
+            /// </param>
+            public static IVaRMonitorResponse ApiIvarlimitGetByCounterpartyAndAssetGet(this IRiskManagementApi operations, string apiKey, string counterparty = default(string), string asset = default(string))
             {
-                return operations.ApiMeanGetAsync(apiKey).GetAwaiter().GetResult();
+                return operations.ApiIvarlimitGetByCounterpartyAndAssetGetAsync(apiKey, counterparty, asset).GetAwaiter().GetResult();
             }
 
+            /// <summary>
+            /// Retrieves current state of concrete limit monitor.
+            /// </summary>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='apiKey'>
+            /// API Token
+            /// </param>
+            /// <param name='counterparty'>
+            /// </param>
+            /// <param name='asset'>
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task<IVaRMonitorResponse> ApiIvarlimitGetByCounterpartyAndAssetGetAsync(this IRiskManagementApi operations, string apiKey, string counterparty = default(string), string asset = default(string), CancellationToken cancellationToken = default(CancellationToken))
+            {
+                using (var _result = await operations.ApiIvarlimitGetByCounterpartyAndAssetGetWithHttpMessagesAsync(apiKey, counterparty, asset, null, cancellationToken).ConfigureAwait(false))
+                {
+                    return _result.Body;
+                }
+            }
+
+            /// <summary>
+            /// Retrieves current state of limit monitor collection. Gives all implicitly
+            /// set limits and all breached Default limits.
+            /// </summary>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='apiKey'>
+            /// API Token
+            /// </param>
+            public static IList<IVaRMonitorResponse> ApiIvarlimitGetAllGet(this IRiskManagementApi operations, string apiKey)
+            {
+                return operations.ApiIvarlimitGetAllGetAsync(apiKey).GetAwaiter().GetResult();
+            }
+
+            /// <summary>
+            /// Retrieves current state of limit monitor collection. Gives all implicitly
+            /// set limits and all breached Default limits.
+            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
@@ -262,7 +346,41 @@ namespace MarginTrading.RiskManagerClient
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<IList<MeanCoeff>> ApiMeanGetAsync(this IRiskManagementApi operations, string apiKey, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<IList<IVaRMonitorResponse>> ApiIvarlimitGetAllGetAsync(this IRiskManagementApi operations, string apiKey, CancellationToken cancellationToken = default(CancellationToken))
+            {
+                using (var _result = await operations.ApiIvarlimitGetAllGetWithHttpMessagesAsync(apiKey, null, cancellationToken).ConfigureAwait(false))
+                {
+                    return _result.Body;
+                }
+            }
+
+            /// <summary>
+            /// Track current values of mean coefficients
+            /// </summary>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='apiKey'>
+            /// API Token
+            /// </param>
+            public static IList<MeanCoeffResponse> ApiMeanGet(this IRiskManagementApi operations, string apiKey)
+            {
+                return operations.ApiMeanGetAsync(apiKey).GetAwaiter().GetResult();
+            }
+
+            /// <summary>
+            /// Track current values of mean coefficients
+            /// </summary>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='apiKey'>
+            /// API Token
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task<IList<MeanCoeffResponse>> ApiMeanGetAsync(this IRiskManagementApi operations, string apiKey, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.ApiMeanGetWithHttpMessagesAsync(apiKey, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -270,6 +388,9 @@ namespace MarginTrading.RiskManagerClient
                 }
             }
 
+            /// <summary>
+            /// Overriding mean coefficiens
+            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
@@ -283,6 +404,9 @@ namespace MarginTrading.RiskManagerClient
                 operations.ApiMeanPostAsync(apiKey, model).GetAwaiter().GetResult();
             }
 
+            /// <summary>
+            /// Overriding mean coefficiens
+            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
@@ -299,6 +423,9 @@ namespace MarginTrading.RiskManagerClient
                 (await operations.ApiMeanPostWithHttpMessagesAsync(apiKey, model, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
 
+            /// <summary>
+            /// Cancel overriding of a mean coefficient
+            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
@@ -312,6 +439,9 @@ namespace MarginTrading.RiskManagerClient
                 operations.ApiMeanDeleteAsync(apiKey, assetId).GetAwaiter().GetResult();
             }
 
+            /// <summary>
+            /// Cancel overriding of a mean coefficient
+            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
@@ -328,34 +458,55 @@ namespace MarginTrading.RiskManagerClient
                 (await operations.ApiMeanDeleteWithHttpMessagesAsync(apiKey, assetId, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
 
+            /// <summary>
+            /// Retrieve requested NetOpenPositions
+            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
             /// <param name='apiKey'>
             /// API Token
             /// </param>
-            public static IList<PnLMonitor> ApiPnllimitGet(this IRiskManagementApi operations, string apiKey)
+            /// <param name='counterPartyId'>
+            /// trader identification
+            /// </param>
+            /// <param name='assetId'>
+            /// asset
+            /// </param>
+            public static IList<NetOpenPositionResponse> ApiNetopenpositionGet(this IRiskManagementApi operations, string apiKey, string counterPartyId = default(string), string assetId = default(string))
             {
-                return operations.ApiPnllimitGetAsync(apiKey).GetAwaiter().GetResult();
+                return operations.ApiNetopenpositionGetAsync(apiKey, counterPartyId, assetId).GetAwaiter().GetResult();
             }
 
+            /// <summary>
+            /// Retrieve requested NetOpenPositions
+            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
             /// <param name='apiKey'>
             /// API Token
+            /// </param>
+            /// <param name='counterPartyId'>
+            /// trader identification
+            /// </param>
+            /// <param name='assetId'>
+            /// asset
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<IList<PnLMonitor>> ApiPnllimitGetAsync(this IRiskManagementApi operations, string apiKey, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<IList<NetOpenPositionResponse>> ApiNetopenpositionGetAsync(this IRiskManagementApi operations, string apiKey, string counterPartyId = default(string), string assetId = default(string), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.ApiPnllimitGetWithHttpMessagesAsync(apiKey, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.ApiNetopenpositionGetWithHttpMessagesAsync(apiKey, counterPartyId, assetId, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
             }
 
+            /// <summary>
+            /// Sets collection of limits
+            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
@@ -364,11 +515,14 @@ namespace MarginTrading.RiskManagerClient
             /// </param>
             /// <param name='model'>
             /// </param>
-            public static void ApiPnllimitPost(this IRiskManagementApi operations, string apiKey, IList<PnLLimit> model = default(IList<PnLLimit>))
+            public static void ApiPnllimitPost(this IRiskManagementApi operations, string apiKey, IList<PnLLimitModel> model = default(IList<PnLLimitModel>))
             {
                 operations.ApiPnllimitPostAsync(apiKey, model).GetAwaiter().GetResult();
             }
 
+            /// <summary>
+            /// Sets collection of limits
+            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
@@ -380,11 +534,14 @@ namespace MarginTrading.RiskManagerClient
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task ApiPnllimitPostAsync(this IRiskManagementApi operations, string apiKey, IList<PnLLimit> model = default(IList<PnLLimit>), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task ApiPnllimitPostAsync(this IRiskManagementApi operations, string apiKey, IList<PnLLimitModel> model = default(IList<PnLLimitModel>), CancellationToken cancellationToken = default(CancellationToken))
             {
                 (await operations.ApiPnllimitPostWithHttpMessagesAsync(apiKey, model, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
 
+            /// <summary>
+            /// Deletes limits for given counterparty
+            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
@@ -398,6 +555,9 @@ namespace MarginTrading.RiskManagerClient
                 operations.ApiPnllimitDeleteAsync(apiKey, counterPartyId).GetAwaiter().GetResult();
             }
 
+            /// <summary>
+            /// Deletes limits for given counterparty
+            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
@@ -414,17 +574,25 @@ namespace MarginTrading.RiskManagerClient
                 (await operations.ApiPnllimitDeleteWithHttpMessagesAsync(apiKey, counterPartyId, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
 
+            /// <summary>
+            /// Retrieves collection of limit monitors. Gives all implicitly set limits and
+            /// all breached Default limits.
+            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
             /// <param name='apiKey'>
             /// API Token
             /// </param>
-            public static IList<PositionMonitor> ApiPositionlimitGet(this IRiskManagementApi operations, string apiKey)
+            public static IList<PnLMonitorResponse> ApiPnllimitGetAllGet(this IRiskManagementApi operations, string apiKey)
             {
-                return operations.ApiPositionlimitGetAsync(apiKey).GetAwaiter().GetResult();
+                return operations.ApiPnllimitGetAllGetAsync(apiKey).GetAwaiter().GetResult();
             }
 
+            /// <summary>
+            /// Retrieves collection of limit monitors. Gives all implicitly set limits and
+            /// all breached Default limits.
+            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
@@ -434,14 +602,19 @@ namespace MarginTrading.RiskManagerClient
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<IList<PositionMonitor>> ApiPositionlimitGetAsync(this IRiskManagementApi operations, string apiKey, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<IList<PnLMonitorResponse>> ApiPnllimitGetAllGetAsync(this IRiskManagementApi operations, string apiKey, CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.ApiPositionlimitGetWithHttpMessagesAsync(apiKey, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.ApiPnllimitGetAllGetWithHttpMessagesAsync(apiKey, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
             }
 
+            /// <summary>
+            /// Sets a collection of limits
+            /// If a limit in collection exists, it will be overwritten
+            /// If does not exist, new will be created
+            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
@@ -449,12 +622,18 @@ namespace MarginTrading.RiskManagerClient
             /// API Token
             /// </param>
             /// <param name='model'>
+            /// Collection of limit objects
             /// </param>
-            public static void ApiPositionlimitPost(this IRiskManagementApi operations, string apiKey, IList<PositionLimit> model = default(IList<PositionLimit>))
+            public static void ApiPositionlimitPost(this IRiskManagementApi operations, string apiKey, IList<PositionLimitModel> model = default(IList<PositionLimitModel>))
             {
                 operations.ApiPositionlimitPostAsync(apiKey, model).GetAwaiter().GetResult();
             }
 
+            /// <summary>
+            /// Sets a collection of limits
+            /// If a limit in collection exists, it will be overwritten
+            /// If does not exist, new will be created
+            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
@@ -462,15 +641,20 @@ namespace MarginTrading.RiskManagerClient
             /// API Token
             /// </param>
             /// <param name='model'>
+            /// Collection of limit objects
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task ApiPositionlimitPostAsync(this IRiskManagementApi operations, string apiKey, IList<PositionLimit> model = default(IList<PositionLimit>), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task ApiPositionlimitPostAsync(this IRiskManagementApi operations, string apiKey, IList<PositionLimitModel> model = default(IList<PositionLimitModel>), CancellationToken cancellationToken = default(CancellationToken))
             {
                 (await operations.ApiPositionlimitPostWithHttpMessagesAsync(apiKey, model, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
 
+            /// <summary>
+            /// Removes limit and monitor for given parameters if exists, does nothing
+            /// otherwise
+            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
@@ -478,14 +662,20 @@ namespace MarginTrading.RiskManagerClient
             /// API Token
             /// </param>
             /// <param name='counterPartyId'>
+            /// trader/maker identification
             /// </param>
             /// <param name='assetId'>
+            /// asset on which the limit is applied
             /// </param>
             public static void ApiPositionlimitDelete(this IRiskManagementApi operations, string apiKey, string counterPartyId = default(string), string assetId = default(string))
             {
                 operations.ApiPositionlimitDeleteAsync(apiKey, counterPartyId, assetId).GetAwaiter().GetResult();
             }
 
+            /// <summary>
+            /// Removes limit and monitor for given parameters if exists, does nothing
+            /// otherwise
+            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
@@ -493,8 +683,10 @@ namespace MarginTrading.RiskManagerClient
             /// API Token
             /// </param>
             /// <param name='counterPartyId'>
+            /// trader/maker identification
             /// </param>
             /// <param name='assetId'>
+            /// asset on which the limit is applied
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
@@ -504,63 +696,124 @@ namespace MarginTrading.RiskManagerClient
                 (await operations.ApiPositionlimitDeleteWithHttpMessagesAsync(apiKey, counterPartyId, assetId, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
 
+            /// <summary>
+            /// Retrieves current state of concrete limit monitor.
+            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
             /// <param name='apiKey'>
             /// API Token
             /// </param>
-            public static IList<PVaRConcentrationMonitor> ApiPvarconcentrationlimitGet(this IRiskManagementApi operations, string apiKey)
+            /// <param name='counterPartyId'>
+            /// </param>
+            /// <param name='assetId'>
+            /// </param>
+            public static PositionMonitorResponse ApiPositionlimitGetByCounterpartyAndAssetGet(this IRiskManagementApi operations, string apiKey, string counterPartyId = default(string), string assetId = default(string))
             {
-                return operations.ApiPvarconcentrationlimitGetAsync(apiKey).GetAwaiter().GetResult();
+                return operations.ApiPositionlimitGetByCounterpartyAndAssetGetAsync(apiKey, counterPartyId, assetId).GetAwaiter().GetResult();
             }
 
+            /// <summary>
+            /// Retrieves current state of concrete limit monitor.
+            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
             /// <param name='apiKey'>
             /// API Token
+            /// </param>
+            /// <param name='counterPartyId'>
+            /// </param>
+            /// <param name='assetId'>
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<IList<PVaRConcentrationMonitor>> ApiPvarconcentrationlimitGetAsync(this IRiskManagementApi operations, string apiKey, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<PositionMonitorResponse> ApiPositionlimitGetByCounterpartyAndAssetGetAsync(this IRiskManagementApi operations, string apiKey, string counterPartyId = default(string), string assetId = default(string), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.ApiPvarconcentrationlimitGetWithHttpMessagesAsync(apiKey, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.ApiPositionlimitGetByCounterpartyAndAssetGetWithHttpMessagesAsync(apiKey, counterPartyId, assetId, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
             }
 
+            /// <summary>
+            /// Retrieves current state of limit monitor collection. Gives all implicitly
+            /// set limits and all breached Default limits.
+            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
             /// <param name='apiKey'>
             /// API Token
             /// </param>
-            /// <param name='model'>
-            /// </param>
-            public static void ApiPvarconcentrationlimitPost(this IRiskManagementApi operations, string apiKey, IList<PVaRConcentrationLimit> model = default(IList<PVaRConcentrationLimit>))
+            public static IList<PositionMonitorResponse> ApiPositionlimitGetAllGet(this IRiskManagementApi operations, string apiKey)
             {
-                operations.ApiPvarconcentrationlimitPostAsync(apiKey, model).GetAwaiter().GetResult();
+                return operations.ApiPositionlimitGetAllGetAsync(apiKey).GetAwaiter().GetResult();
             }
 
+            /// <summary>
+            /// Retrieves current state of limit monitor collection. Gives all implicitly
+            /// set limits and all breached Default limits.
+            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
             /// <param name='apiKey'>
             /// API Token
-            /// </param>
-            /// <param name='model'>
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task ApiPvarconcentrationlimitPostAsync(this IRiskManagementApi operations, string apiKey, IList<PVaRConcentrationLimit> model = default(IList<PVaRConcentrationLimit>), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<IList<PositionMonitorResponse>> ApiPositionlimitGetAllGetAsync(this IRiskManagementApi operations, string apiKey, CancellationToken cancellationToken = default(CancellationToken))
+            {
+                using (var _result = await operations.ApiPositionlimitGetAllGetWithHttpMessagesAsync(apiKey, null, cancellationToken).ConfigureAwait(false))
+                {
+                    return _result.Body;
+                }
+            }
+
+            /// <summary>
+            /// Setting limits
+            /// </summary>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='apiKey'>
+            /// API Token
+            /// </param>
+            /// <param name='model'>
+            /// PVaR concentration limit: 0 lower than SOFT lower than HARD lower than 1
+            /// </param>
+            public static void ApiPvarconcentrationlimitPost(this IRiskManagementApi operations, string apiKey, IList<PVaRConcentrationLimitModel> model = default(IList<PVaRConcentrationLimitModel>))
+            {
+                operations.ApiPvarconcentrationlimitPostAsync(apiKey, model).GetAwaiter().GetResult();
+            }
+
+            /// <summary>
+            /// Setting limits
+            /// </summary>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='apiKey'>
+            /// API Token
+            /// </param>
+            /// <param name='model'>
+            /// PVaR concentration limit: 0 lower than SOFT lower than HARD lower than 1
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task ApiPvarconcentrationlimitPostAsync(this IRiskManagementApi operations, string apiKey, IList<PVaRConcentrationLimitModel> model = default(IList<PVaRConcentrationLimitModel>), CancellationToken cancellationToken = default(CancellationToken))
             {
                 (await operations.ApiPvarconcentrationlimitPostWithHttpMessagesAsync(apiKey, model, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
 
+            /// <summary>
+            /// Clearing the limit for given counterparty
+            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
@@ -576,6 +829,9 @@ namespace MarginTrading.RiskManagerClient
                 operations.ApiPvarconcentrationlimitDeleteAsync(apiKey, counterPartyId, makerCounterPartyId).GetAwaiter().GetResult();
             }
 
+            /// <summary>
+            /// Clearing the limit for given counterparty
+            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
@@ -594,34 +850,87 @@ namespace MarginTrading.RiskManagerClient
                 (await operations.ApiPvarconcentrationlimitDeleteWithHttpMessagesAsync(apiKey, counterPartyId, makerCounterPartyId, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
 
+            /// <summary>
+            /// Retrieves current state of concrete limit monitor.
+            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
             /// <param name='apiKey'>
             /// API Token
             /// </param>
-            public static IList<PVaRMonitor> ApiPvarlimitGet(this IRiskManagementApi operations, string apiKey)
+            /// <param name='counterPartyId'>
+            /// </param>
+            /// <param name='makerCounterPartyId'>
+            /// </param>
+            public static PVaRConcentrationMonitorResponse ApiPvarconcentrationlimitGetByCounterpartyGet(this IRiskManagementApi operations, string apiKey, string counterPartyId = default(string), string makerCounterPartyId = default(string))
             {
-                return operations.ApiPvarlimitGetAsync(apiKey).GetAwaiter().GetResult();
+                return operations.ApiPvarconcentrationlimitGetByCounterpartyGetAsync(apiKey, counterPartyId, makerCounterPartyId).GetAwaiter().GetResult();
             }
 
+            /// <summary>
+            /// Retrieves current state of concrete limit monitor.
+            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
             /// <param name='apiKey'>
             /// API Token
+            /// </param>
+            /// <param name='counterPartyId'>
+            /// </param>
+            /// <param name='makerCounterPartyId'>
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<IList<PVaRMonitor>> ApiPvarlimitGetAsync(this IRiskManagementApi operations, string apiKey, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<PVaRConcentrationMonitorResponse> ApiPvarconcentrationlimitGetByCounterpartyGetAsync(this IRiskManagementApi operations, string apiKey, string counterPartyId = default(string), string makerCounterPartyId = default(string), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.ApiPvarlimitGetWithHttpMessagesAsync(apiKey, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.ApiPvarconcentrationlimitGetByCounterpartyGetWithHttpMessagesAsync(apiKey, counterPartyId, makerCounterPartyId, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
             }
 
+            /// <summary>
+            /// Retrieves current state of limit monitor collection. Gives all implicitly
+            /// set limits and all breached Default limits.
+            /// </summary>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='apiKey'>
+            /// API Token
+            /// </param>
+            public static IList<PVaRConcentrationMonitorResponse> ApiPvarconcentrationlimitGetAllGet(this IRiskManagementApi operations, string apiKey)
+            {
+                return operations.ApiPvarconcentrationlimitGetAllGetAsync(apiKey).GetAwaiter().GetResult();
+            }
+
+            /// <summary>
+            /// Retrieves current state of limit monitor collection. Gives all implicitly
+            /// set limits and all breached Default limits.
+            /// </summary>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='apiKey'>
+            /// API Token
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task<IList<PVaRConcentrationMonitorResponse>> ApiPvarconcentrationlimitGetAllGetAsync(this IRiskManagementApi operations, string apiKey, CancellationToken cancellationToken = default(CancellationToken))
+            {
+                using (var _result = await operations.ApiPvarconcentrationlimitGetAllGetWithHttpMessagesAsync(apiKey, null, cancellationToken).ConfigureAwait(false))
+                {
+                    return _result.Body;
+                }
+            }
+
+            /// <summary>
+            /// Sets limits
+            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
@@ -630,11 +939,14 @@ namespace MarginTrading.RiskManagerClient
             /// </param>
             /// <param name='model'>
             /// </param>
-            public static void ApiPvarlimitPost(this IRiskManagementApi operations, string apiKey, IList<PVaRLimit> model = default(IList<PVaRLimit>))
+            public static void ApiPvarlimitPost(this IRiskManagementApi operations, string apiKey, IList<PVaRLimitModel> model = default(IList<PVaRLimitModel>))
             {
                 operations.ApiPvarlimitPostAsync(apiKey, model).GetAwaiter().GetResult();
             }
 
+            /// <summary>
+            /// Sets limits
+            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
@@ -646,11 +958,14 @@ namespace MarginTrading.RiskManagerClient
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task ApiPvarlimitPostAsync(this IRiskManagementApi operations, string apiKey, IList<PVaRLimit> model = default(IList<PVaRLimit>), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task ApiPvarlimitPostAsync(this IRiskManagementApi operations, string apiKey, IList<PVaRLimitModel> model = default(IList<PVaRLimitModel>), CancellationToken cancellationToken = default(CancellationToken))
             {
                 (await operations.ApiPvarlimitPostWithHttpMessagesAsync(apiKey, model, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
 
+            /// <summary>
+            /// Clears all limits for a given counterparty
+            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
@@ -664,6 +979,9 @@ namespace MarginTrading.RiskManagerClient
                 operations.ApiPvarlimitDeleteAsync(apiKey, counterPartyId).GetAwaiter().GetResult();
             }
 
+            /// <summary>
+            /// Clears all limits for a given counterparty
+            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
@@ -680,17 +998,25 @@ namespace MarginTrading.RiskManagerClient
                 (await operations.ApiPvarlimitDeleteWithHttpMessagesAsync(apiKey, counterPartyId, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
 
+            /// <summary>
+            /// Retrieves current state of limit monitor collection. Gives all implicitly
+            /// set limits and all breached Default limits.
+            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
             /// <param name='apiKey'>
             /// API Token
             /// </param>
-            public static IList<StDevCoeff> ApiSigmaGet(this IRiskManagementApi operations, string apiKey)
+            public static IList<PVaRMonitorResponse> ApiPvarlimitGetAllGet(this IRiskManagementApi operations, string apiKey)
             {
-                return operations.ApiSigmaGetAsync(apiKey).GetAwaiter().GetResult();
+                return operations.ApiPvarlimitGetAllGetAsync(apiKey).GetAwaiter().GetResult();
             }
 
+            /// <summary>
+            /// Retrieves current state of limit monitor collection. Gives all implicitly
+            /// set limits and all breached Default limits.
+            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
@@ -700,7 +1026,41 @@ namespace MarginTrading.RiskManagerClient
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<IList<StDevCoeff>> ApiSigmaGetAsync(this IRiskManagementApi operations, string apiKey, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<IList<PVaRMonitorResponse>> ApiPvarlimitGetAllGetAsync(this IRiskManagementApi operations, string apiKey, CancellationToken cancellationToken = default(CancellationToken))
+            {
+                using (var _result = await operations.ApiPvarlimitGetAllGetWithHttpMessagesAsync(apiKey, null, cancellationToken).ConfigureAwait(false))
+                {
+                    return _result.Body;
+                }
+            }
+
+            /// <summary>
+            /// Track current values of sigma coefficients
+            /// </summary>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='apiKey'>
+            /// API Token
+            /// </param>
+            public static IList<StDevCoeffResponse> ApiSigmaGet(this IRiskManagementApi operations, string apiKey)
+            {
+                return operations.ApiSigmaGetAsync(apiKey).GetAwaiter().GetResult();
+            }
+
+            /// <summary>
+            /// Track current values of sigma coefficients
+            /// </summary>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='apiKey'>
+            /// API Token
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task<IList<StDevCoeffResponse>> ApiSigmaGetAsync(this IRiskManagementApi operations, string apiKey, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.ApiSigmaGetWithHttpMessagesAsync(apiKey, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -708,6 +1068,9 @@ namespace MarginTrading.RiskManagerClient
                 }
             }
 
+            /// <summary>
+            /// Overriding sigma coefficiens
+            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
@@ -721,6 +1084,9 @@ namespace MarginTrading.RiskManagerClient
                 operations.ApiSigmaPostAsync(apiKey, model).GetAwaiter().GetResult();
             }
 
+            /// <summary>
+            /// Overriding sigma coefficiens
+            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
@@ -737,6 +1103,9 @@ namespace MarginTrading.RiskManagerClient
                 (await operations.ApiSigmaPostWithHttpMessagesAsync(apiKey, model, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
 
+            /// <summary>
+            /// Cancel overriding of a sigma coefficient
+            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
@@ -750,6 +1119,9 @@ namespace MarginTrading.RiskManagerClient
                 operations.ApiSigmaDeleteAsync(apiKey, assetId).GetAwaiter().GetResult();
             }
 
+            /// <summary>
+            /// Cancel overriding of a sigma coefficient
+            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
@@ -766,17 +1138,23 @@ namespace MarginTrading.RiskManagerClient
                 (await operations.ApiSigmaDeleteWithHttpMessagesAsync(apiKey, assetId, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
 
+            /// <summary>
+            /// GET Method
+            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
             /// <param name='apiKey'>
             /// API Token
             /// </param>
-            public static ISystemParameters ApiSystemParametersGet(this IRiskManagementApi operations, string apiKey)
+            public static SystemParametersResponse ApiSystemParametersGet(this IRiskManagementApi operations, string apiKey)
             {
                 return operations.ApiSystemParametersGetAsync(apiKey).GetAwaiter().GetResult();
             }
 
+            /// <summary>
+            /// GET Method
+            /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
@@ -786,9 +1164,47 @@ namespace MarginTrading.RiskManagerClient
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<ISystemParameters> ApiSystemParametersGetAsync(this IRiskManagementApi operations, string apiKey, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<SystemParametersResponse> ApiSystemParametersGetAsync(this IRiskManagementApi operations, string apiKey, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.ApiSystemParametersGetWithHttpMessagesAsync(apiKey, null, cancellationToken).ConfigureAwait(false))
+                {
+                    return _result.Body;
+                }
+            }
+
+            /// <summary>
+            /// Fill positions special fields if they are empty.
+            /// </summary>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='apiKey'>
+            /// API Token
+            /// </param>
+            /// <param name='tradingPositions'>
+            /// </param>
+            public static object ApiTradingpositionPost(this IRiskManagementApi operations, string apiKey, IList<TradingPosition> tradingPositions = default(IList<TradingPosition>))
+            {
+                return operations.ApiTradingpositionPostAsync(apiKey, tradingPositions).GetAwaiter().GetResult();
+            }
+
+            /// <summary>
+            /// Fill positions special fields if they are empty.
+            /// </summary>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='apiKey'>
+            /// API Token
+            /// </param>
+            /// <param name='tradingPositions'>
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task<object> ApiTradingpositionPostAsync(this IRiskManagementApi operations, string apiKey, IList<TradingPosition> tradingPositions = default(IList<TradingPosition>), CancellationToken cancellationToken = default(CancellationToken))
+            {
+                using (var _result = await operations.ApiTradingpositionPostWithHttpMessagesAsync(apiKey, tradingPositions, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }

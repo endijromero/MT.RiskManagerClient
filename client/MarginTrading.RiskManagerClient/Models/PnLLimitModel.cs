@@ -8,20 +8,20 @@ namespace MarginTrading.RiskManagerClient.Models
     using Newtonsoft.Json;
     using System.Linq;
 
-    public partial class PnLLimit
+    public partial class PnLLimitModel
     {
         /// <summary>
-        /// Initializes a new instance of the PnLLimit class.
+        /// Initializes a new instance of the PnLLimitModel class.
         /// </summary>
-        public PnLLimit()
+        public PnLLimitModel()
         {
           CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the PnLLimit class.
+        /// Initializes a new instance of the PnLLimitModel class.
         /// </summary>
-        public PnLLimit(string counterPartyId = default(string), double? softLimit = default(double?), double? hardLimit = default(double?))
+        public PnLLimitModel(string counterPartyId = default(string), double? softLimit = default(double?), double? hardLimit = default(double?))
         {
             CounterPartyId = counterPartyId;
             SoftLimit = softLimit;

@@ -32,6 +32,9 @@ namespace MarginTrading.RiskManagerClient
         JsonSerializerSettings DeserializationSettings { get; }
 
 
+        /// <summary>
+        /// Returns list of individual assets
+        /// </summary>
         /// <param name='apiKey'>
         /// API Token
         /// </param>
@@ -43,6 +46,10 @@ namespace MarginTrading.RiskManagerClient
         /// </param>
         Task<HttpOperationResponse<IList<string>>> ApiAssetsGetWithHttpMessagesAsync(string apiKey, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
+        /// <summary>
+        /// Retrieve current state of correlation coefficient cache which is
+        /// used for calculation - with live and overriden parameters
+        /// </summary>
         /// <param name='apiKey'>
         /// API Token
         /// </param>
@@ -52,12 +59,16 @@ namespace MarginTrading.RiskManagerClient
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<IList<CorrCoeff>>> ApiCorrCoeffGetWithHttpMessagesAsync(string apiKey, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<IList<CorrCoeffResponse>>> ApiCorrCoeffGetWithHttpMessagesAsync(string apiKey, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
+        /// <summary>
+        /// Override a coefficient
+        /// </summary>
         /// <param name='apiKey'>
         /// API Token
         /// </param>
         /// <param name='model'>
+        /// Collection of overriding coefficients
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -67,12 +78,17 @@ namespace MarginTrading.RiskManagerClient
         /// </param>
         Task<HttpOperationResponse> ApiCorrCoeffPostWithHttpMessagesAsync(string apiKey, IList<CorrCoeffOverrideModel> model = default(IList<CorrCoeffOverrideModel>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
+        /// <summary>
+        /// Cancel overriding of a coefficient with given coordinates
+        /// </summary>
         /// <param name='apiKey'>
         /// API Token
         /// </param>
         /// <param name='assetX'>
+        /// X coordinate in correlation matrix
         /// </param>
         /// <param name='assetY'>
+        /// Y coordinate in correlation matrix
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -82,6 +98,9 @@ namespace MarginTrading.RiskManagerClient
         /// </param>
         Task<HttpOperationResponse> ApiCorrCoeffDeleteWithHttpMessagesAsync(string apiKey, string assetX = default(string), string assetY = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
+        /// <summary>
+        /// Returns execution state and version of running service
+        /// </summary>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
         /// </param>
@@ -90,21 +109,16 @@ namespace MarginTrading.RiskManagerClient
         /// </param>
         Task<HttpOperationResponse> ApiIsaliveGetWithHttpMessagesAsync(Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
-        /// <param name='apiKey'>
-        /// API Token
-        /// </param>
-        /// <param name='customHeaders'>
-        /// The headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        Task<HttpOperationResponse<IList<IVaRMonitor>>> ApiIvarlimitGetWithHttpMessagesAsync(string apiKey, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-
+        /// <summary>
+        /// Sets a collection of limits
+        /// If a limit in collection exists, it will be overwritten
+        /// If does not exist, new will be created
+        /// </summary>
         /// <param name='apiKey'>
         /// API Token
         /// </param>
         /// <param name='model'>
+        /// Collection of limit objects
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -112,14 +126,20 @@ namespace MarginTrading.RiskManagerClient
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse> ApiIvarlimitPostWithHttpMessagesAsync(string apiKey, IList<IVaRLimit> model = default(IList<IVaRLimit>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse> ApiIvarlimitPostWithHttpMessagesAsync(string apiKey, IList<IVaRLimitModel> model = default(IList<IVaRLimitModel>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
+        /// <summary>
+        /// Removes limit and monitor for given parameters if exists, does
+        /// nothing otherwise
+        /// </summary>
         /// <param name='apiKey'>
         /// API Token
         /// </param>
         /// <param name='counterPartyId'>
+        /// trader/maker identification
         /// </param>
         /// <param name='assetId'>
+        /// asset on which the limit is applied
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -129,6 +149,28 @@ namespace MarginTrading.RiskManagerClient
         /// </param>
         Task<HttpOperationResponse> ApiIvarlimitDeleteWithHttpMessagesAsync(string apiKey, string counterPartyId = default(string), string assetId = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
+        /// <summary>
+        /// Retrieves current state of concrete limit monitor.
+        /// </summary>
+        /// <param name='apiKey'>
+        /// API Token
+        /// </param>
+        /// <param name='counterparty'>
+        /// </param>
+        /// <param name='asset'>
+        /// </param>
+        /// <param name='customHeaders'>
+        /// The headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        Task<HttpOperationResponse<IVaRMonitorResponse>> ApiIvarlimitGetByCounterpartyAndAssetGetWithHttpMessagesAsync(string apiKey, string counterparty = default(string), string asset = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Retrieves current state of limit monitor collection. Gives all
+        /// implicitly set limits and all breached Default limits.
+        /// </summary>
         /// <param name='apiKey'>
         /// API Token
         /// </param>
@@ -138,8 +180,25 @@ namespace MarginTrading.RiskManagerClient
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<IList<MeanCoeff>>> ApiMeanGetWithHttpMessagesAsync(string apiKey, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<IList<IVaRMonitorResponse>>> ApiIvarlimitGetAllGetWithHttpMessagesAsync(string apiKey, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
+        /// <summary>
+        /// Track current values of mean coefficients
+        /// </summary>
+        /// <param name='apiKey'>
+        /// API Token
+        /// </param>
+        /// <param name='customHeaders'>
+        /// The headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        Task<HttpOperationResponse<IList<MeanCoeffResponse>>> ApiMeanGetWithHttpMessagesAsync(string apiKey, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Overriding mean coefficiens
+        /// </summary>
         /// <param name='apiKey'>
         /// API Token
         /// </param>
@@ -153,6 +212,9 @@ namespace MarginTrading.RiskManagerClient
         /// </param>
         Task<HttpOperationResponse> ApiMeanPostWithHttpMessagesAsync(string apiKey, IList<MeanCoeffOverrideModel> model = default(IList<MeanCoeffOverrideModel>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
+        /// <summary>
+        /// Cancel overriding of a mean coefficient
+        /// </summary>
         /// <param name='apiKey'>
         /// API Token
         /// </param>
@@ -166,8 +228,17 @@ namespace MarginTrading.RiskManagerClient
         /// </param>
         Task<HttpOperationResponse> ApiMeanDeleteWithHttpMessagesAsync(string apiKey, string assetId = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
+        /// <summary>
+        /// Retrieve requested NetOpenPositions
+        /// </summary>
         /// <param name='apiKey'>
         /// API Token
+        /// </param>
+        /// <param name='counterPartyId'>
+        /// trader identification
+        /// </param>
+        /// <param name='assetId'>
+        /// asset
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -175,8 +246,11 @@ namespace MarginTrading.RiskManagerClient
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<IList<PnLMonitor>>> ApiPnllimitGetWithHttpMessagesAsync(string apiKey, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<IList<NetOpenPositionResponse>>> ApiNetopenpositionGetWithHttpMessagesAsync(string apiKey, string counterPartyId = default(string), string assetId = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
+        /// <summary>
+        /// Sets collection of limits
+        /// </summary>
         /// <param name='apiKey'>
         /// API Token
         /// </param>
@@ -188,8 +262,11 @@ namespace MarginTrading.RiskManagerClient
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse> ApiPnllimitPostWithHttpMessagesAsync(string apiKey, IList<PnLLimit> model = default(IList<PnLLimit>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse> ApiPnllimitPostWithHttpMessagesAsync(string apiKey, IList<PnLLimitModel> model = default(IList<PnLLimitModel>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
+        /// <summary>
+        /// Deletes limits for given counterparty
+        /// </summary>
         /// <param name='apiKey'>
         /// API Token
         /// </param>
@@ -203,6 +280,10 @@ namespace MarginTrading.RiskManagerClient
         /// </param>
         Task<HttpOperationResponse> ApiPnllimitDeleteWithHttpMessagesAsync(string apiKey, string counterPartyId = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
+        /// <summary>
+        /// Retrieves collection of limit monitors. Gives all implicitly set
+        /// limits and all breached Default limits.
+        /// </summary>
         /// <param name='apiKey'>
         /// API Token
         /// </param>
@@ -212,12 +293,18 @@ namespace MarginTrading.RiskManagerClient
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<IList<PositionMonitor>>> ApiPositionlimitGetWithHttpMessagesAsync(string apiKey, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<IList<PnLMonitorResponse>>> ApiPnllimitGetAllGetWithHttpMessagesAsync(string apiKey, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
+        /// <summary>
+        /// Sets a collection of limits
+        /// If a limit in collection exists, it will be overwritten
+        /// If does not exist, new will be created
+        /// </summary>
         /// <param name='apiKey'>
         /// API Token
         /// </param>
         /// <param name='model'>
+        /// Collection of limit objects
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -225,8 +312,32 @@ namespace MarginTrading.RiskManagerClient
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse> ApiPositionlimitPostWithHttpMessagesAsync(string apiKey, IList<PositionLimit> model = default(IList<PositionLimit>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse> ApiPositionlimitPostWithHttpMessagesAsync(string apiKey, IList<PositionLimitModel> model = default(IList<PositionLimitModel>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
+        /// <summary>
+        /// Removes limit and monitor for given parameters if exists, does
+        /// nothing otherwise
+        /// </summary>
+        /// <param name='apiKey'>
+        /// API Token
+        /// </param>
+        /// <param name='counterPartyId'>
+        /// trader/maker identification
+        /// </param>
+        /// <param name='assetId'>
+        /// asset on which the limit is applied
+        /// </param>
+        /// <param name='customHeaders'>
+        /// The headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        Task<HttpOperationResponse> ApiPositionlimitDeleteWithHttpMessagesAsync(string apiKey, string counterPartyId = default(string), string assetId = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Retrieves current state of concrete limit monitor.
+        /// </summary>
         /// <param name='apiKey'>
         /// API Token
         /// </param>
@@ -240,8 +351,12 @@ namespace MarginTrading.RiskManagerClient
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse> ApiPositionlimitDeleteWithHttpMessagesAsync(string apiKey, string counterPartyId = default(string), string assetId = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<PositionMonitorResponse>> ApiPositionlimitGetByCounterpartyAndAssetGetWithHttpMessagesAsync(string apiKey, string counterPartyId = default(string), string assetId = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
+        /// <summary>
+        /// Retrieves current state of limit monitor collection. Gives all
+        /// implicitly set limits and all breached Default limits.
+        /// </summary>
         /// <param name='apiKey'>
         /// API Token
         /// </param>
@@ -251,12 +366,17 @@ namespace MarginTrading.RiskManagerClient
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<IList<PVaRConcentrationMonitor>>> ApiPvarconcentrationlimitGetWithHttpMessagesAsync(string apiKey, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<IList<PositionMonitorResponse>>> ApiPositionlimitGetAllGetWithHttpMessagesAsync(string apiKey, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
+        /// <summary>
+        /// Setting limits
+        /// </summary>
         /// <param name='apiKey'>
         /// API Token
         /// </param>
         /// <param name='model'>
+        /// PVaR concentration limit: 0 lower than SOFT lower than HARD lower
+        /// than 1
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -264,8 +384,11 @@ namespace MarginTrading.RiskManagerClient
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse> ApiPvarconcentrationlimitPostWithHttpMessagesAsync(string apiKey, IList<PVaRConcentrationLimit> model = default(IList<PVaRConcentrationLimit>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse> ApiPvarconcentrationlimitPostWithHttpMessagesAsync(string apiKey, IList<PVaRConcentrationLimitModel> model = default(IList<PVaRConcentrationLimitModel>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
+        /// <summary>
+        /// Clearing the limit for given counterparty
+        /// </summary>
         /// <param name='apiKey'>
         /// API Token
         /// </param>
@@ -281,6 +404,28 @@ namespace MarginTrading.RiskManagerClient
         /// </param>
         Task<HttpOperationResponse> ApiPvarconcentrationlimitDeleteWithHttpMessagesAsync(string apiKey, string counterPartyId = default(string), string makerCounterPartyId = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
+        /// <summary>
+        /// Retrieves current state of concrete limit monitor.
+        /// </summary>
+        /// <param name='apiKey'>
+        /// API Token
+        /// </param>
+        /// <param name='counterPartyId'>
+        /// </param>
+        /// <param name='makerCounterPartyId'>
+        /// </param>
+        /// <param name='customHeaders'>
+        /// The headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        Task<HttpOperationResponse<PVaRConcentrationMonitorResponse>> ApiPvarconcentrationlimitGetByCounterpartyGetWithHttpMessagesAsync(string apiKey, string counterPartyId = default(string), string makerCounterPartyId = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Retrieves current state of limit monitor collection. Gives all
+        /// implicitly set limits and all breached Default limits.
+        /// </summary>
         /// <param name='apiKey'>
         /// API Token
         /// </param>
@@ -290,8 +435,11 @@ namespace MarginTrading.RiskManagerClient
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<IList<PVaRMonitor>>> ApiPvarlimitGetWithHttpMessagesAsync(string apiKey, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<IList<PVaRConcentrationMonitorResponse>>> ApiPvarconcentrationlimitGetAllGetWithHttpMessagesAsync(string apiKey, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
+        /// <summary>
+        /// Sets limits
+        /// </summary>
         /// <param name='apiKey'>
         /// API Token
         /// </param>
@@ -303,8 +451,11 @@ namespace MarginTrading.RiskManagerClient
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse> ApiPvarlimitPostWithHttpMessagesAsync(string apiKey, IList<PVaRLimit> model = default(IList<PVaRLimit>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse> ApiPvarlimitPostWithHttpMessagesAsync(string apiKey, IList<PVaRLimitModel> model = default(IList<PVaRLimitModel>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
+        /// <summary>
+        /// Clears all limits for a given counterparty
+        /// </summary>
         /// <param name='apiKey'>
         /// API Token
         /// </param>
@@ -318,6 +469,10 @@ namespace MarginTrading.RiskManagerClient
         /// </param>
         Task<HttpOperationResponse> ApiPvarlimitDeleteWithHttpMessagesAsync(string apiKey, string counterPartyId = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
+        /// <summary>
+        /// Retrieves current state of limit monitor collection. Gives all
+        /// implicitly set limits and all breached Default limits.
+        /// </summary>
         /// <param name='apiKey'>
         /// API Token
         /// </param>
@@ -327,8 +482,25 @@ namespace MarginTrading.RiskManagerClient
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<IList<StDevCoeff>>> ApiSigmaGetWithHttpMessagesAsync(string apiKey, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<IList<PVaRMonitorResponse>>> ApiPvarlimitGetAllGetWithHttpMessagesAsync(string apiKey, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
+        /// <summary>
+        /// Track current values of sigma coefficients
+        /// </summary>
+        /// <param name='apiKey'>
+        /// API Token
+        /// </param>
+        /// <param name='customHeaders'>
+        /// The headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        Task<HttpOperationResponse<IList<StDevCoeffResponse>>> ApiSigmaGetWithHttpMessagesAsync(string apiKey, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Overriding sigma coefficiens
+        /// </summary>
         /// <param name='apiKey'>
         /// API Token
         /// </param>
@@ -342,6 +514,9 @@ namespace MarginTrading.RiskManagerClient
         /// </param>
         Task<HttpOperationResponse> ApiSigmaPostWithHttpMessagesAsync(string apiKey, IList<StDevCoeffOverrideModel> model = default(IList<StDevCoeffOverrideModel>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
+        /// <summary>
+        /// Cancel overriding of a sigma coefficient
+        /// </summary>
         /// <param name='apiKey'>
         /// API Token
         /// </param>
@@ -355,6 +530,9 @@ namespace MarginTrading.RiskManagerClient
         /// </param>
         Task<HttpOperationResponse> ApiSigmaDeleteWithHttpMessagesAsync(string apiKey, string assetId = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
+        /// <summary>
+        /// GET Method
+        /// </summary>
         /// <param name='apiKey'>
         /// API Token
         /// </param>
@@ -364,7 +542,23 @@ namespace MarginTrading.RiskManagerClient
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<ISystemParameters>> ApiSystemParametersGetWithHttpMessagesAsync(string apiKey, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<SystemParametersResponse>> ApiSystemParametersGetWithHttpMessagesAsync(string apiKey, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Fill positions special fields if they are empty.
+        /// </summary>
+        /// <param name='apiKey'>
+        /// API Token
+        /// </param>
+        /// <param name='tradingPositions'>
+        /// </param>
+        /// <param name='customHeaders'>
+        /// The headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        Task<HttpOperationResponse<object>> ApiTradingpositionPostWithHttpMessagesAsync(string apiKey, IList<TradingPosition> tradingPositions = default(IList<TradingPosition>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
     }
 }

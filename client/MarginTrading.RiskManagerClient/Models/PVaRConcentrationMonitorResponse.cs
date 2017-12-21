@@ -8,20 +8,22 @@ namespace MarginTrading.RiskManagerClient.Models
     using Newtonsoft.Json;
     using System.Linq;
 
-    public partial class PVaRConcentrationMonitor
+    public partial class PVaRConcentrationMonitorResponse
     {
         /// <summary>
-        /// Initializes a new instance of the PVaRConcentrationMonitor class.
+        /// Initializes a new instance of the PVaRConcentrationMonitorResponse
+        /// class.
         /// </summary>
-        public PVaRConcentrationMonitor()
+        public PVaRConcentrationMonitorResponse()
         {
           CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the PVaRConcentrationMonitor class.
+        /// Initializes a new instance of the PVaRConcentrationMonitorResponse
+        /// class.
         /// </summary>
-        public PVaRConcentrationMonitor(double? takerPVaR = default(double?), double? makerPVaR = default(double?), string makerCounterPartyId = default(string), string traderCounterPartyId = default(string), double? softLimitPercentage = default(double?), double? hardLimitPercentage = default(double?), double? treshold = default(double?), bool? isSoftLimitSet = default(bool?), bool? isHardLimitSet = default(bool?), bool? isSoftLimitBreached = default(bool?), bool? isHardLimitBreached = default(bool?))
+        public PVaRConcentrationMonitorResponse(double takerPVaR, double makerPVaR, bool isSoftLimitSet, bool isHardLimitSet, bool isSoftLimitBreached, bool isHardLimitBreached, string makerCounterPartyId = default(string), string traderCounterPartyId = default(string), double? softLimitPercentage = default(double?), double? hardLimitPercentage = default(double?), double? treshold = default(double?))
         {
             TakerPVaR = takerPVaR;
             MakerPVaR = makerPVaR;
@@ -45,12 +47,12 @@ namespace MarginTrading.RiskManagerClient.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "takerPVaR")]
-        public double? TakerPVaR { get; set; }
+        public double TakerPVaR { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "makerPVaR")]
-        public double? MakerPVaR { get; set; }
+        public double MakerPVaR { get; set; }
 
         /// <summary>
         /// </summary>
@@ -80,22 +82,32 @@ namespace MarginTrading.RiskManagerClient.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "isSoftLimitSet")]
-        public bool? IsSoftLimitSet { get; private set; }
+        public bool IsSoftLimitSet { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "isHardLimitSet")]
-        public bool? IsHardLimitSet { get; private set; }
+        public bool IsHardLimitSet { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "isSoftLimitBreached")]
-        public bool? IsSoftLimitBreached { get; private set; }
+        public bool IsSoftLimitBreached { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "isHardLimitBreached")]
-        public bool? IsHardLimitBreached { get; private set; }
+        public bool IsHardLimitBreached { get; set; }
 
+        /// <summary>
+        /// Validate the object.
+        /// </summary>
+        /// <exception cref="Microsoft.Rest.ValidationException">
+        /// Thrown if validation fails
+        /// </exception>
+        public virtual void Validate()
+        {
+            //Nothing to validate
+        }
     }
 }

@@ -8,20 +8,20 @@ namespace MarginTrading.RiskManagerClient.Models
     using Newtonsoft.Json;
     using System.Linq;
 
-    public partial class PVaRLimit
+    public partial class PVaRLimitModel
     {
         /// <summary>
-        /// Initializes a new instance of the PVaRLimit class.
+        /// Initializes a new instance of the PVaRLimitModel class.
         /// </summary>
-        public PVaRLimit()
+        public PVaRLimitModel()
         {
           CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the PVaRLimit class.
+        /// Initializes a new instance of the PVaRLimitModel class.
         /// </summary>
-        public PVaRLimit(string counterPartyId = default(string), double? softLimit = default(double?), double? hardLimit = default(double?))
+        public PVaRLimitModel(string counterPartyId = default(string), double? softLimit = default(double?), double? hardLimit = default(double?))
         {
             CounterPartyId = counterPartyId;
             SoftLimit = softLimit;

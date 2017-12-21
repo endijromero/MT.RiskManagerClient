@@ -8,22 +8,23 @@ namespace MarginTrading.RiskManagerClient.Models
     using Newtonsoft.Json;
     using System.Linq;
 
-    public partial class StDevCoeff
+    public partial class CorrCoeffResponse
     {
         /// <summary>
-        /// Initializes a new instance of the StDevCoeff class.
+        /// Initializes a new instance of the CorrCoeffResponse class.
         /// </summary>
-        public StDevCoeff()
+        public CorrCoeffResponse()
         {
           CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the StDevCoeff class.
+        /// Initializes a new instance of the CorrCoeffResponse class.
         /// </summary>
-        public StDevCoeff(string asset = default(string), double? calculatedValue = default(double?), bool? overridden = default(bool?), double? overriddenValue = default(double?))
+        public CorrCoeffResponse(double calculatedValue, bool overridden, string assetX = default(string), string assetY = default(string), double? overriddenValue = default(double?))
         {
-            Asset = asset;
+            AssetX = assetX;
+            AssetY = assetY;
             CalculatedValue = calculatedValue;
             Overridden = overridden;
             OverriddenValue = overriddenValue;
@@ -37,23 +38,38 @@ namespace MarginTrading.RiskManagerClient.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "asset")]
-        public string Asset { get; set; }
+        [JsonProperty(PropertyName = "assetX")]
+        public string AssetX { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "assetY")]
+        public string AssetY { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "calculatedValue")]
-        public double? CalculatedValue { get; set; }
+        public double CalculatedValue { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "overridden")]
-        public bool? Overridden { get; set; }
+        public bool Overridden { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "overriddenValue")]
         public double? OverriddenValue { get; set; }
 
+        /// <summary>
+        /// Validate the object.
+        /// </summary>
+        /// <exception cref="Microsoft.Rest.ValidationException">
+        /// Thrown if validation fails
+        /// </exception>
+        public virtual void Validate()
+        {
+            //Nothing to validate
+        }
     }
 }

@@ -8,20 +8,20 @@ namespace MarginTrading.RiskManagerClient.Models
     using Newtonsoft.Json;
     using System.Linq;
 
-    public partial class IVaRLimit
+    public partial class IVaRLimitModel
     {
         /// <summary>
-        /// Initializes a new instance of the IVaRLimit class.
+        /// Initializes a new instance of the IVaRLimitModel class.
         /// </summary>
-        public IVaRLimit()
+        public IVaRLimitModel()
         {
           CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the IVaRLimit class.
+        /// Initializes a new instance of the IVaRLimitModel class.
         /// </summary>
-        public IVaRLimit(string assetId = default(string), string counterPartyId = default(string), double? softLimit = default(double?), double? hardLimit = default(double?))
+        public IVaRLimitModel(string assetId = default(string), string counterPartyId = default(string), double? softLimit = default(double?), double? hardLimit = default(double?))
         {
             AssetId = assetId;
             CounterPartyId = counterPartyId;

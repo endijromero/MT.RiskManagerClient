@@ -8,20 +8,20 @@ namespace MarginTrading.RiskManagerClient.Models
     using Newtonsoft.Json;
     using System.Linq;
 
-    public partial class PositionMonitor
+    public partial class PositionMonitorResponse
     {
         /// <summary>
-        /// Initializes a new instance of the PositionMonitor class.
+        /// Initializes a new instance of the PositionMonitorResponse class.
         /// </summary>
-        public PositionMonitor()
+        public PositionMonitorResponse()
         {
           CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the PositionMonitor class.
+        /// Initializes a new instance of the PositionMonitorResponse class.
         /// </summary>
-        public PositionMonitor(double? value = default(double?), string counterPartyId = default(string), string assetId = default(string), double? lowerSoftLimit = default(double?), double? lowerHardLimit = default(double?), double? upperSoftLimit = default(double?), double? upperHardLimit = default(double?), bool? isLowerSoftLimitSet = default(bool?), bool? isLowerHardLimitSet = default(bool?), bool? isUpperSoftLimitSet = default(bool?), bool? isUpperHardLimitSet = default(bool?), bool? isLowerSoftLimitBreached = default(bool?), bool? isLowerHardLimitBreached = default(bool?), bool? isUpperSoftLimitBreached = default(bool?), bool? isUpperHardLimitBreached = default(bool?))
+        public PositionMonitorResponse(double value, bool isLowerSoftLimitSet, bool isLowerHardLimitSet, bool isUpperSoftLimitSet, bool isUpperHardLimitSet, bool isLowerSoftLimitBreached, bool isLowerHardLimitBreached, bool isUpperSoftLimitBreached, bool isUpperHardLimitBreached, string counterPartyId = default(string), string assetId = default(string), double? lowerSoftLimit = default(double?), double? lowerHardLimit = default(double?), double? upperSoftLimit = default(double?), double? upperHardLimit = default(double?))
         {
             Value = value;
             CounterPartyId = counterPartyId;
@@ -49,7 +49,7 @@ namespace MarginTrading.RiskManagerClient.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "value")]
-        public double? Value { get; set; }
+        public double Value { get; set; }
 
         /// <summary>
         /// </summary>
@@ -84,42 +84,52 @@ namespace MarginTrading.RiskManagerClient.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "isLowerSoftLimitSet")]
-        public bool? IsLowerSoftLimitSet { get; private set; }
+        public bool IsLowerSoftLimitSet { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "isLowerHardLimitSet")]
-        public bool? IsLowerHardLimitSet { get; private set; }
+        public bool IsLowerHardLimitSet { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "isUpperSoftLimitSet")]
-        public bool? IsUpperSoftLimitSet { get; private set; }
+        public bool IsUpperSoftLimitSet { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "isUpperHardLimitSet")]
-        public bool? IsUpperHardLimitSet { get; private set; }
+        public bool IsUpperHardLimitSet { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "isLowerSoftLimitBreached")]
-        public bool? IsLowerSoftLimitBreached { get; private set; }
+        public bool IsLowerSoftLimitBreached { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "isLowerHardLimitBreached")]
-        public bool? IsLowerHardLimitBreached { get; private set; }
+        public bool IsLowerHardLimitBreached { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "isUpperSoftLimitBreached")]
-        public bool? IsUpperSoftLimitBreached { get; private set; }
+        public bool IsUpperSoftLimitBreached { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "isUpperHardLimitBreached")]
-        public bool? IsUpperHardLimitBreached { get; private set; }
+        public bool IsUpperHardLimitBreached { get; set; }
 
+        /// <summary>
+        /// Validate the object.
+        /// </summary>
+        /// <exception cref="Microsoft.Rest.ValidationException">
+        /// Thrown if validation fails
+        /// </exception>
+        public virtual void Validate()
+        {
+            //Nothing to validate
+        }
     }
 }

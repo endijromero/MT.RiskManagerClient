@@ -8,20 +8,20 @@ namespace MarginTrading.RiskManagerClient.Models
     using Newtonsoft.Json;
     using System.Linq;
 
-    public partial class PositionLimit
+    public partial class PositionLimitModel
     {
         /// <summary>
-        /// Initializes a new instance of the PositionLimit class.
+        /// Initializes a new instance of the PositionLimitModel class.
         /// </summary>
-        public PositionLimit()
+        public PositionLimitModel()
         {
           CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the PositionLimit class.
+        /// Initializes a new instance of the PositionLimitModel class.
         /// </summary>
-        public PositionLimit(string assetId = default(string), string counterPartyId = default(string), double? lowerSoftLimit = default(double?), double? lowerHardLimit = default(double?), double? upperSoftLimit = default(double?), double? upperHardLimit = default(double?))
+        public PositionLimitModel(string assetId = default(string), string counterPartyId = default(string), double? lowerSoftLimit = default(double?), double? lowerHardLimit = default(double?), double? upperSoftLimit = default(double?), double? upperHardLimit = default(double?))
         {
             AssetId = assetId;
             CounterPartyId = counterPartyId;

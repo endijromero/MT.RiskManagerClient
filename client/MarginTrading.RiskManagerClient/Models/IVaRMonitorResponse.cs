@@ -8,23 +8,24 @@ namespace MarginTrading.RiskManagerClient.Models
     using Newtonsoft.Json;
     using System.Linq;
 
-    public partial class PVaRMonitor
+    public partial class IVaRMonitorResponse
     {
         /// <summary>
-        /// Initializes a new instance of the PVaRMonitor class.
+        /// Initializes a new instance of the IVaRMonitorResponse class.
         /// </summary>
-        public PVaRMonitor()
+        public IVaRMonitorResponse()
         {
           CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the PVaRMonitor class.
+        /// Initializes a new instance of the IVaRMonitorResponse class.
         /// </summary>
-        public PVaRMonitor(double? value = default(double?), string counterPartyId = default(string), double? softLimit = default(double?), double? hardLimit = default(double?), bool? isSoftLimitSet = default(bool?), bool? isHardLimitSet = default(bool?), bool? isSoftLimitBreached = default(bool?), bool? isHardLimitBreached = default(bool?))
+        public IVaRMonitorResponse(double value, bool isSoftLimitSet, bool isHardLimitSet, bool isSoftLimitBreached, bool isHardLimitBreached, string assetId = default(string), string counterPartyId = default(string), double? softLimit = default(double?), double? hardLimit = default(double?))
         {
-            Value = value;
+            AssetId = assetId;
             CounterPartyId = counterPartyId;
+            Value = value;
             SoftLimit = softLimit;
             HardLimit = hardLimit;
             IsSoftLimitSet = isSoftLimitSet;
@@ -41,13 +42,18 @@ namespace MarginTrading.RiskManagerClient.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "value")]
-        public double? Value { get; set; }
+        [JsonProperty(PropertyName = "assetId")]
+        public string AssetId { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "counterPartyId")]
         public string CounterPartyId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "value")]
+        public double Value { get; set; }
 
         /// <summary>
         /// </summary>
@@ -62,22 +68,32 @@ namespace MarginTrading.RiskManagerClient.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "isSoftLimitSet")]
-        public bool? IsSoftLimitSet { get; private set; }
+        public bool IsSoftLimitSet { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "isHardLimitSet")]
-        public bool? IsHardLimitSet { get; private set; }
+        public bool IsHardLimitSet { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "isSoftLimitBreached")]
-        public bool? IsSoftLimitBreached { get; private set; }
+        public bool IsSoftLimitBreached { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "isHardLimitBreached")]
-        public bool? IsHardLimitBreached { get; private set; }
+        public bool IsHardLimitBreached { get; set; }
 
+        /// <summary>
+        /// Validate the object.
+        /// </summary>
+        /// <exception cref="Microsoft.Rest.ValidationException">
+        /// Thrown if validation fails
+        /// </exception>
+        public virtual void Validate()
+        {
+            //Nothing to validate
+        }
     }
 }

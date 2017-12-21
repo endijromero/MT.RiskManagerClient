@@ -139,6 +139,9 @@ namespace MarginTrading.RiskManagerClient
             };
             CustomInitialize();
         }
+        /// <summary>
+        /// Returns list of individual assets
+        /// </summary>
         /// <param name='apiKey'>
         /// API Token
         /// </param>
@@ -278,6 +281,10 @@ namespace MarginTrading.RiskManagerClient
             return _result;
         }
 
+        /// <summary>
+        /// Retrieve current state of correlation coefficient cache which is used for
+        /// calculation - with live and overriden parameters
+        /// </summary>
         /// <param name='apiKey'>
         /// API Token
         /// </param>
@@ -302,7 +309,7 @@ namespace MarginTrading.RiskManagerClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<IList<CorrCoeff>>> ApiCorrCoeffGetWithHttpMessagesAsync(string apiKey, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<IList<CorrCoeffResponse>>> ApiCorrCoeffGetWithHttpMessagesAsync(string apiKey, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (apiKey == null)
             {
@@ -389,7 +396,7 @@ namespace MarginTrading.RiskManagerClient
                 throw ex;
             }
             // Create Result
-            var _result = new HttpOperationResponse<IList<CorrCoeff>>();
+            var _result = new HttpOperationResponse<IList<CorrCoeffResponse>>();
             _result.Request = _httpRequest;
             _result.Response = _httpResponse;
             // Deserialize Response
@@ -398,7 +405,7 @@ namespace MarginTrading.RiskManagerClient
                 _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    _result.Body = SafeJsonConvert.DeserializeObject<IList<CorrCoeff>>(_responseContent, DeserializationSettings);
+                    _result.Body = SafeJsonConvert.DeserializeObject<IList<CorrCoeffResponse>>(_responseContent, DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
@@ -417,10 +424,14 @@ namespace MarginTrading.RiskManagerClient
             return _result;
         }
 
+        /// <summary>
+        /// Override a coefficient
+        /// </summary>
         /// <param name='apiKey'>
         /// API Token
         /// </param>
         /// <param name='model'>
+        /// Collection of overriding coefficients
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -442,6 +453,16 @@ namespace MarginTrading.RiskManagerClient
         /// </return>
         public async Task<HttpOperationResponse> ApiCorrCoeffPostWithHttpMessagesAsync(string apiKey, IList<CorrCoeffOverrideModel> model = default(IList<CorrCoeffOverrideModel>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
+            if (model != null)
+            {
+                foreach (var element in model)
+                {
+                    if (element != null)
+                    {
+                        element.Validate();
+                    }
+                }
+            }
             if (apiKey == null)
             {
                 throw new ValidationException(ValidationRules.CannotBeNull, "apiKey");
@@ -544,12 +565,17 @@ namespace MarginTrading.RiskManagerClient
             return _result;
         }
 
+        /// <summary>
+        /// Cancel overriding of a coefficient with given coordinates
+        /// </summary>
         /// <param name='apiKey'>
         /// API Token
         /// </param>
         /// <param name='assetX'>
+        /// X coordinate in correlation matrix
         /// </param>
         /// <param name='assetY'>
+        /// Y coordinate in correlation matrix
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -681,6 +707,9 @@ namespace MarginTrading.RiskManagerClient
             return _result;
         }
 
+        /// <summary>
+        /// Returns execution state and version of running service
+        /// </summary>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
         /// </param>
@@ -777,149 +806,16 @@ namespace MarginTrading.RiskManagerClient
             return _result;
         }
 
-        /// <param name='apiKey'>
-        /// API Token
-        /// </param>
-        /// <param name='customHeaders'>
-        /// Headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        /// <exception cref="HttpOperationException">
-        /// Thrown when the operation returned an invalid status code
-        /// </exception>
-        /// <exception cref="SerializationException">
-        /// Thrown when unable to deserialize the response
-        /// </exception>
-        /// <exception cref="ValidationException">
-        /// Thrown when a required parameter is null
-        /// </exception>
-        /// <exception cref="System.ArgumentNullException">
-        /// Thrown when a required parameter is null
-        /// </exception>
-        /// <return>
-        /// A response object containing the response body and response headers.
-        /// </return>
-        public async Task<HttpOperationResponse<IList<IVaRMonitor>>> ApiIvarlimitGetWithHttpMessagesAsync(string apiKey, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            if (apiKey == null)
-            {
-                throw new ValidationException(ValidationRules.CannotBeNull, "apiKey");
-            }
-            // Tracing
-            bool _shouldTrace = ServiceClientTracing.IsEnabled;
-            string _invocationId = null;
-            if (_shouldTrace)
-            {
-                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
-                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("apiKey", apiKey);
-                tracingParameters.Add("cancellationToken", cancellationToken);
-                ServiceClientTracing.Enter(_invocationId, this, "ApiIvarlimitGet", tracingParameters);
-            }
-            // Construct URL
-            var _baseUrl = BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/ivarlimit").ToString();
-            // Create HTTP transport objects
-            var _httpRequest = new HttpRequestMessage();
-            HttpResponseMessage _httpResponse = null;
-            _httpRequest.Method = new HttpMethod("GET");
-            _httpRequest.RequestUri = new System.Uri(_url);
-            // Set Headers
-            if (apiKey != null)
-            {
-                if (_httpRequest.Headers.Contains("api-key"))
-                {
-                    _httpRequest.Headers.Remove("api-key");
-                }
-                _httpRequest.Headers.TryAddWithoutValidation("api-key", apiKey);
-            }
-
-
-            if (customHeaders != null)
-            {
-                foreach(var _header in customHeaders)
-                {
-                    if (_httpRequest.Headers.Contains(_header.Key))
-                    {
-                        _httpRequest.Headers.Remove(_header.Key);
-                    }
-                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
-                }
-            }
-
-            // Serialize Request
-            string _requestContent = null;
-            // Send Request
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
-            }
-            cancellationToken.ThrowIfCancellationRequested();
-            _httpResponse = await HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
-            }
-            HttpStatusCode _statusCode = _httpResponse.StatusCode;
-            cancellationToken.ThrowIfCancellationRequested();
-            string _responseContent = null;
-            if ((int)_statusCode != 200)
-            {
-                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
-                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
-                }
-                else {
-                    _responseContent = string.Empty;
-                }
-                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
-                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
-                if (_shouldTrace)
-                {
-                    ServiceClientTracing.Error(_invocationId, ex);
-                }
-                _httpRequest.Dispose();
-                if (_httpResponse != null)
-                {
-                    _httpResponse.Dispose();
-                }
-                throw ex;
-            }
-            // Create Result
-            var _result = new HttpOperationResponse<IList<IVaRMonitor>>();
-            _result.Request = _httpRequest;
-            _result.Response = _httpResponse;
-            // Deserialize Response
-            if ((int)_statusCode == 200)
-            {
-                _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
-                try
-                {
-                    _result.Body = SafeJsonConvert.DeserializeObject<IList<IVaRMonitor>>(_responseContent, DeserializationSettings);
-                }
-                catch (JsonException ex)
-                {
-                    _httpRequest.Dispose();
-                    if (_httpResponse != null)
-                    {
-                        _httpResponse.Dispose();
-                    }
-                    throw new SerializationException("Unable to deserialize the response.", _responseContent, ex);
-                }
-            }
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.Exit(_invocationId, _result);
-            }
-            return _result;
-        }
-
+        /// <summary>
+        /// Sets a collection of limits
+        /// If a limit in collection exists, it will be overwritten
+        /// If does not exist, new will be created
+        /// </summary>
         /// <param name='apiKey'>
         /// API Token
         /// </param>
         /// <param name='model'>
+        /// Collection of limit objects
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -939,7 +835,7 @@ namespace MarginTrading.RiskManagerClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse> ApiIvarlimitPostWithHttpMessagesAsync(string apiKey, IList<IVaRLimit> model = default(IList<IVaRLimit>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse> ApiIvarlimitPostWithHttpMessagesAsync(string apiKey, IList<IVaRLimitModel> model = default(IList<IVaRLimitModel>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (apiKey == null)
             {
@@ -1043,12 +939,18 @@ namespace MarginTrading.RiskManagerClient
             return _result;
         }
 
+        /// <summary>
+        /// Removes limit and monitor for given parameters if exists, does nothing
+        /// otherwise
+        /// </summary>
         /// <param name='apiKey'>
         /// API Token
         /// </param>
         /// <param name='counterPartyId'>
+        /// trader/maker identification
         /// </param>
         /// <param name='assetId'>
+        /// asset on which the limit is applied
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -1180,6 +1082,171 @@ namespace MarginTrading.RiskManagerClient
             return _result;
         }
 
+        /// <summary>
+        /// Retrieves current state of concrete limit monitor.
+        /// </summary>
+        /// <param name='apiKey'>
+        /// API Token
+        /// </param>
+        /// <param name='counterparty'>
+        /// </param>
+        /// <param name='asset'>
+        /// </param>
+        /// <param name='customHeaders'>
+        /// Headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="SerializationException">
+        /// Thrown when unable to deserialize the response
+        /// </exception>
+        /// <exception cref="ValidationException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        /// <exception cref="System.ArgumentNullException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        /// <return>
+        /// A response object containing the response body and response headers.
+        /// </return>
+        public async Task<HttpOperationResponse<IVaRMonitorResponse>> ApiIvarlimitGetByCounterpartyAndAssetGetWithHttpMessagesAsync(string apiKey, string counterparty = default(string), string asset = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (apiKey == null)
+            {
+                throw new ValidationException(ValidationRules.CannotBeNull, "apiKey");
+            }
+            // Tracing
+            bool _shouldTrace = ServiceClientTracing.IsEnabled;
+            string _invocationId = null;
+            if (_shouldTrace)
+            {
+                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
+                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("counterparty", counterparty);
+                tracingParameters.Add("asset", asset);
+                tracingParameters.Add("apiKey", apiKey);
+                tracingParameters.Add("cancellationToken", cancellationToken);
+                ServiceClientTracing.Enter(_invocationId, this, "ApiIvarlimitGetByCounterpartyAndAssetGet", tracingParameters);
+            }
+            // Construct URL
+            var _baseUrl = BaseUri.AbsoluteUri;
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/ivarlimit/GetByCounterpartyAndAsset").ToString();
+            List<string> _queryParameters = new List<string>();
+            if (counterparty != null)
+            {
+                _queryParameters.Add(string.Format("counterparty={0}", System.Uri.EscapeDataString(counterparty)));
+            }
+            if (asset != null)
+            {
+                _queryParameters.Add(string.Format("asset={0}", System.Uri.EscapeDataString(asset)));
+            }
+            if (_queryParameters.Count > 0)
+            {
+                _url += "?" + string.Join("&", _queryParameters);
+            }
+            // Create HTTP transport objects
+            var _httpRequest = new HttpRequestMessage();
+            HttpResponseMessage _httpResponse = null;
+            _httpRequest.Method = new HttpMethod("GET");
+            _httpRequest.RequestUri = new System.Uri(_url);
+            // Set Headers
+            if (apiKey != null)
+            {
+                if (_httpRequest.Headers.Contains("api-key"))
+                {
+                    _httpRequest.Headers.Remove("api-key");
+                }
+                _httpRequest.Headers.TryAddWithoutValidation("api-key", apiKey);
+            }
+
+
+            if (customHeaders != null)
+            {
+                foreach(var _header in customHeaders)
+                {
+                    if (_httpRequest.Headers.Contains(_header.Key))
+                    {
+                        _httpRequest.Headers.Remove(_header.Key);
+                    }
+                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
+                }
+            }
+
+            // Serialize Request
+            string _requestContent = null;
+            // Send Request
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
+            }
+            cancellationToken.ThrowIfCancellationRequested();
+            _httpResponse = await HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
+            }
+            HttpStatusCode _statusCode = _httpResponse.StatusCode;
+            cancellationToken.ThrowIfCancellationRequested();
+            string _responseContent = null;
+            if ((int)_statusCode != 200)
+            {
+                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
+                if (_httpResponse.Content != null) {
+                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                }
+                else {
+                    _responseContent = string.Empty;
+                }
+                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
+                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
+                if (_shouldTrace)
+                {
+                    ServiceClientTracing.Error(_invocationId, ex);
+                }
+                _httpRequest.Dispose();
+                if (_httpResponse != null)
+                {
+                    _httpResponse.Dispose();
+                }
+                throw ex;
+            }
+            // Create Result
+            var _result = new HttpOperationResponse<IVaRMonitorResponse>();
+            _result.Request = _httpRequest;
+            _result.Response = _httpResponse;
+            // Deserialize Response
+            if ((int)_statusCode == 200)
+            {
+                _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                try
+                {
+                    _result.Body = SafeJsonConvert.DeserializeObject<IVaRMonitorResponse>(_responseContent, DeserializationSettings);
+                }
+                catch (JsonException ex)
+                {
+                    _httpRequest.Dispose();
+                    if (_httpResponse != null)
+                    {
+                        _httpResponse.Dispose();
+                    }
+                    throw new SerializationException("Unable to deserialize the response.", _responseContent, ex);
+                }
+            }
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.Exit(_invocationId, _result);
+            }
+            return _result;
+        }
+
+        /// <summary>
+        /// Retrieves current state of limit monitor collection. Gives all implicitly
+        /// set limits and all breached Default limits.
+        /// </summary>
         /// <param name='apiKey'>
         /// API Token
         /// </param>
@@ -1204,7 +1271,149 @@ namespace MarginTrading.RiskManagerClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<IList<MeanCoeff>>> ApiMeanGetWithHttpMessagesAsync(string apiKey, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<IList<IVaRMonitorResponse>>> ApiIvarlimitGetAllGetWithHttpMessagesAsync(string apiKey, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (apiKey == null)
+            {
+                throw new ValidationException(ValidationRules.CannotBeNull, "apiKey");
+            }
+            // Tracing
+            bool _shouldTrace = ServiceClientTracing.IsEnabled;
+            string _invocationId = null;
+            if (_shouldTrace)
+            {
+                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
+                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("apiKey", apiKey);
+                tracingParameters.Add("cancellationToken", cancellationToken);
+                ServiceClientTracing.Enter(_invocationId, this, "ApiIvarlimitGetAllGet", tracingParameters);
+            }
+            // Construct URL
+            var _baseUrl = BaseUri.AbsoluteUri;
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/ivarlimit/GetAll").ToString();
+            // Create HTTP transport objects
+            var _httpRequest = new HttpRequestMessage();
+            HttpResponseMessage _httpResponse = null;
+            _httpRequest.Method = new HttpMethod("GET");
+            _httpRequest.RequestUri = new System.Uri(_url);
+            // Set Headers
+            if (apiKey != null)
+            {
+                if (_httpRequest.Headers.Contains("api-key"))
+                {
+                    _httpRequest.Headers.Remove("api-key");
+                }
+                _httpRequest.Headers.TryAddWithoutValidation("api-key", apiKey);
+            }
+
+
+            if (customHeaders != null)
+            {
+                foreach(var _header in customHeaders)
+                {
+                    if (_httpRequest.Headers.Contains(_header.Key))
+                    {
+                        _httpRequest.Headers.Remove(_header.Key);
+                    }
+                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
+                }
+            }
+
+            // Serialize Request
+            string _requestContent = null;
+            // Send Request
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
+            }
+            cancellationToken.ThrowIfCancellationRequested();
+            _httpResponse = await HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
+            }
+            HttpStatusCode _statusCode = _httpResponse.StatusCode;
+            cancellationToken.ThrowIfCancellationRequested();
+            string _responseContent = null;
+            if ((int)_statusCode != 200)
+            {
+                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
+                if (_httpResponse.Content != null) {
+                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                }
+                else {
+                    _responseContent = string.Empty;
+                }
+                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
+                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
+                if (_shouldTrace)
+                {
+                    ServiceClientTracing.Error(_invocationId, ex);
+                }
+                _httpRequest.Dispose();
+                if (_httpResponse != null)
+                {
+                    _httpResponse.Dispose();
+                }
+                throw ex;
+            }
+            // Create Result
+            var _result = new HttpOperationResponse<IList<IVaRMonitorResponse>>();
+            _result.Request = _httpRequest;
+            _result.Response = _httpResponse;
+            // Deserialize Response
+            if ((int)_statusCode == 200)
+            {
+                _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                try
+                {
+                    _result.Body = SafeJsonConvert.DeserializeObject<IList<IVaRMonitorResponse>>(_responseContent, DeserializationSettings);
+                }
+                catch (JsonException ex)
+                {
+                    _httpRequest.Dispose();
+                    if (_httpResponse != null)
+                    {
+                        _httpResponse.Dispose();
+                    }
+                    throw new SerializationException("Unable to deserialize the response.", _responseContent, ex);
+                }
+            }
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.Exit(_invocationId, _result);
+            }
+            return _result;
+        }
+
+        /// <summary>
+        /// Track current values of mean coefficients
+        /// </summary>
+        /// <param name='apiKey'>
+        /// API Token
+        /// </param>
+        /// <param name='customHeaders'>
+        /// Headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="SerializationException">
+        /// Thrown when unable to deserialize the response
+        /// </exception>
+        /// <exception cref="ValidationException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        /// <exception cref="System.ArgumentNullException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        /// <return>
+        /// A response object containing the response body and response headers.
+        /// </return>
+        public async Task<HttpOperationResponse<IList<MeanCoeffResponse>>> ApiMeanGetWithHttpMessagesAsync(string apiKey, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (apiKey == null)
             {
@@ -1291,7 +1500,7 @@ namespace MarginTrading.RiskManagerClient
                 throw ex;
             }
             // Create Result
-            var _result = new HttpOperationResponse<IList<MeanCoeff>>();
+            var _result = new HttpOperationResponse<IList<MeanCoeffResponse>>();
             _result.Request = _httpRequest;
             _result.Response = _httpResponse;
             // Deserialize Response
@@ -1300,7 +1509,7 @@ namespace MarginTrading.RiskManagerClient
                 _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    _result.Body = SafeJsonConvert.DeserializeObject<IList<MeanCoeff>>(_responseContent, DeserializationSettings);
+                    _result.Body = SafeJsonConvert.DeserializeObject<IList<MeanCoeffResponse>>(_responseContent, DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
@@ -1319,6 +1528,9 @@ namespace MarginTrading.RiskManagerClient
             return _result;
         }
 
+        /// <summary>
+        /// Overriding mean coefficiens
+        /// </summary>
         /// <param name='apiKey'>
         /// API Token
         /// </param>
@@ -1344,6 +1556,16 @@ namespace MarginTrading.RiskManagerClient
         /// </return>
         public async Task<HttpOperationResponse> ApiMeanPostWithHttpMessagesAsync(string apiKey, IList<MeanCoeffOverrideModel> model = default(IList<MeanCoeffOverrideModel>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
+            if (model != null)
+            {
+                foreach (var element in model)
+                {
+                    if (element != null)
+                    {
+                        element.Validate();
+                    }
+                }
+            }
             if (apiKey == null)
             {
                 throw new ValidationException(ValidationRules.CannotBeNull, "apiKey");
@@ -1446,6 +1668,9 @@ namespace MarginTrading.RiskManagerClient
             return _result;
         }
 
+        /// <summary>
+        /// Cancel overriding of a mean coefficient
+        /// </summary>
         /// <param name='apiKey'>
         /// API Token
         /// </param>
@@ -1576,8 +1801,17 @@ namespace MarginTrading.RiskManagerClient
             return _result;
         }
 
+        /// <summary>
+        /// Retrieve requested NetOpenPositions
+        /// </summary>
         /// <param name='apiKey'>
         /// API Token
+        /// </param>
+        /// <param name='counterPartyId'>
+        /// trader identification
+        /// </param>
+        /// <param name='assetId'>
+        /// asset
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -1600,7 +1834,7 @@ namespace MarginTrading.RiskManagerClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<IList<PnLMonitor>>> ApiPnllimitGetWithHttpMessagesAsync(string apiKey, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<IList<NetOpenPositionResponse>>> ApiNetopenpositionGetWithHttpMessagesAsync(string apiKey, string counterPartyId = default(string), string assetId = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (apiKey == null)
             {
@@ -1613,13 +1847,28 @@ namespace MarginTrading.RiskManagerClient
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("counterPartyId", counterPartyId);
+                tracingParameters.Add("assetId", assetId);
                 tracingParameters.Add("apiKey", apiKey);
                 tracingParameters.Add("cancellationToken", cancellationToken);
-                ServiceClientTracing.Enter(_invocationId, this, "ApiPnllimitGet", tracingParameters);
+                ServiceClientTracing.Enter(_invocationId, this, "ApiNetopenpositionGet", tracingParameters);
             }
             // Construct URL
             var _baseUrl = BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/pnllimit").ToString();
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/netopenposition").ToString();
+            List<string> _queryParameters = new List<string>();
+            if (counterPartyId != null)
+            {
+                _queryParameters.Add(string.Format("counterPartyId={0}", System.Uri.EscapeDataString(counterPartyId)));
+            }
+            if (assetId != null)
+            {
+                _queryParameters.Add(string.Format("assetId={0}", System.Uri.EscapeDataString(assetId)));
+            }
+            if (_queryParameters.Count > 0)
+            {
+                _url += "?" + string.Join("&", _queryParameters);
+            }
             // Create HTTP transport objects
             var _httpRequest = new HttpRequestMessage();
             HttpResponseMessage _httpResponse = null;
@@ -1687,7 +1936,7 @@ namespace MarginTrading.RiskManagerClient
                 throw ex;
             }
             // Create Result
-            var _result = new HttpOperationResponse<IList<PnLMonitor>>();
+            var _result = new HttpOperationResponse<IList<NetOpenPositionResponse>>();
             _result.Request = _httpRequest;
             _result.Response = _httpResponse;
             // Deserialize Response
@@ -1696,7 +1945,7 @@ namespace MarginTrading.RiskManagerClient
                 _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    _result.Body = SafeJsonConvert.DeserializeObject<IList<PnLMonitor>>(_responseContent, DeserializationSettings);
+                    _result.Body = SafeJsonConvert.DeserializeObject<IList<NetOpenPositionResponse>>(_responseContent, DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
@@ -1715,6 +1964,9 @@ namespace MarginTrading.RiskManagerClient
             return _result;
         }
 
+        /// <summary>
+        /// Sets collection of limits
+        /// </summary>
         /// <param name='apiKey'>
         /// API Token
         /// </param>
@@ -1738,7 +1990,7 @@ namespace MarginTrading.RiskManagerClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse> ApiPnllimitPostWithHttpMessagesAsync(string apiKey, IList<PnLLimit> model = default(IList<PnLLimit>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse> ApiPnllimitPostWithHttpMessagesAsync(string apiKey, IList<PnLLimitModel> model = default(IList<PnLLimitModel>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (apiKey == null)
             {
@@ -1842,6 +2094,9 @@ namespace MarginTrading.RiskManagerClient
             return _result;
         }
 
+        /// <summary>
+        /// Deletes limits for given counterparty
+        /// </summary>
         /// <param name='apiKey'>
         /// API Token
         /// </param>
@@ -1972,6 +2227,10 @@ namespace MarginTrading.RiskManagerClient
             return _result;
         }
 
+        /// <summary>
+        /// Retrieves collection of limit monitors. Gives all implicitly set limits and
+        /// all breached Default limits.
+        /// </summary>
         /// <param name='apiKey'>
         /// API Token
         /// </param>
@@ -1996,7 +2255,7 @@ namespace MarginTrading.RiskManagerClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<IList<PositionMonitor>>> ApiPositionlimitGetWithHttpMessagesAsync(string apiKey, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<IList<PnLMonitorResponse>>> ApiPnllimitGetAllGetWithHttpMessagesAsync(string apiKey, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (apiKey == null)
             {
@@ -2011,11 +2270,11 @@ namespace MarginTrading.RiskManagerClient
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
                 tracingParameters.Add("apiKey", apiKey);
                 tracingParameters.Add("cancellationToken", cancellationToken);
-                ServiceClientTracing.Enter(_invocationId, this, "ApiPositionlimitGet", tracingParameters);
+                ServiceClientTracing.Enter(_invocationId, this, "ApiPnllimitGetAllGet", tracingParameters);
             }
             // Construct URL
             var _baseUrl = BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/positionlimit").ToString();
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/pnllimit/GetAll").ToString();
             // Create HTTP transport objects
             var _httpRequest = new HttpRequestMessage();
             HttpResponseMessage _httpResponse = null;
@@ -2083,7 +2342,7 @@ namespace MarginTrading.RiskManagerClient
                 throw ex;
             }
             // Create Result
-            var _result = new HttpOperationResponse<IList<PositionMonitor>>();
+            var _result = new HttpOperationResponse<IList<PnLMonitorResponse>>();
             _result.Request = _httpRequest;
             _result.Response = _httpResponse;
             // Deserialize Response
@@ -2092,7 +2351,7 @@ namespace MarginTrading.RiskManagerClient
                 _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    _result.Body = SafeJsonConvert.DeserializeObject<IList<PositionMonitor>>(_responseContent, DeserializationSettings);
+                    _result.Body = SafeJsonConvert.DeserializeObject<IList<PnLMonitorResponse>>(_responseContent, DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
@@ -2111,10 +2370,16 @@ namespace MarginTrading.RiskManagerClient
             return _result;
         }
 
+        /// <summary>
+        /// Sets a collection of limits
+        /// If a limit in collection exists, it will be overwritten
+        /// If does not exist, new will be created
+        /// </summary>
         /// <param name='apiKey'>
         /// API Token
         /// </param>
         /// <param name='model'>
+        /// Collection of limit objects
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -2134,7 +2399,7 @@ namespace MarginTrading.RiskManagerClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse> ApiPositionlimitPostWithHttpMessagesAsync(string apiKey, IList<PositionLimit> model = default(IList<PositionLimit>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse> ApiPositionlimitPostWithHttpMessagesAsync(string apiKey, IList<PositionLimitModel> model = default(IList<PositionLimitModel>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (apiKey == null)
             {
@@ -2238,12 +2503,18 @@ namespace MarginTrading.RiskManagerClient
             return _result;
         }
 
+        /// <summary>
+        /// Removes limit and monitor for given parameters if exists, does nothing
+        /// otherwise
+        /// </summary>
         /// <param name='apiKey'>
         /// API Token
         /// </param>
         /// <param name='counterPartyId'>
+        /// trader/maker identification
         /// </param>
         /// <param name='assetId'>
+        /// asset on which the limit is applied
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -2375,8 +2646,15 @@ namespace MarginTrading.RiskManagerClient
             return _result;
         }
 
+        /// <summary>
+        /// Retrieves current state of concrete limit monitor.
+        /// </summary>
         /// <param name='apiKey'>
         /// API Token
+        /// </param>
+        /// <param name='counterPartyId'>
+        /// </param>
+        /// <param name='assetId'>
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -2399,7 +2677,7 @@ namespace MarginTrading.RiskManagerClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<IList<PVaRConcentrationMonitor>>> ApiPvarconcentrationlimitGetWithHttpMessagesAsync(string apiKey, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<PositionMonitorResponse>> ApiPositionlimitGetByCounterpartyAndAssetGetWithHttpMessagesAsync(string apiKey, string counterPartyId = default(string), string assetId = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (apiKey == null)
             {
@@ -2412,13 +2690,28 @@ namespace MarginTrading.RiskManagerClient
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("counterPartyId", counterPartyId);
+                tracingParameters.Add("assetId", assetId);
                 tracingParameters.Add("apiKey", apiKey);
                 tracingParameters.Add("cancellationToken", cancellationToken);
-                ServiceClientTracing.Enter(_invocationId, this, "ApiPvarconcentrationlimitGet", tracingParameters);
+                ServiceClientTracing.Enter(_invocationId, this, "ApiPositionlimitGetByCounterpartyAndAssetGet", tracingParameters);
             }
             // Construct URL
             var _baseUrl = BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/pvarconcentrationlimit").ToString();
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/positionlimit/GetByCounterpartyAndAsset").ToString();
+            List<string> _queryParameters = new List<string>();
+            if (counterPartyId != null)
+            {
+                _queryParameters.Add(string.Format("counterPartyId={0}", System.Uri.EscapeDataString(counterPartyId)));
+            }
+            if (assetId != null)
+            {
+                _queryParameters.Add(string.Format("assetId={0}", System.Uri.EscapeDataString(assetId)));
+            }
+            if (_queryParameters.Count > 0)
+            {
+                _url += "?" + string.Join("&", _queryParameters);
+            }
             // Create HTTP transport objects
             var _httpRequest = new HttpRequestMessage();
             HttpResponseMessage _httpResponse = null;
@@ -2486,7 +2779,7 @@ namespace MarginTrading.RiskManagerClient
                 throw ex;
             }
             // Create Result
-            var _result = new HttpOperationResponse<IList<PVaRConcentrationMonitor>>();
+            var _result = new HttpOperationResponse<PositionMonitorResponse>();
             _result.Request = _httpRequest;
             _result.Response = _httpResponse;
             // Deserialize Response
@@ -2495,7 +2788,7 @@ namespace MarginTrading.RiskManagerClient
                 _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    _result.Body = SafeJsonConvert.DeserializeObject<IList<PVaRConcentrationMonitor>>(_responseContent, DeserializationSettings);
+                    _result.Body = SafeJsonConvert.DeserializeObject<PositionMonitorResponse>(_responseContent, DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
@@ -2514,10 +2807,157 @@ namespace MarginTrading.RiskManagerClient
             return _result;
         }
 
+        /// <summary>
+        /// Retrieves current state of limit monitor collection. Gives all implicitly
+        /// set limits and all breached Default limits.
+        /// </summary>
+        /// <param name='apiKey'>
+        /// API Token
+        /// </param>
+        /// <param name='customHeaders'>
+        /// Headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="SerializationException">
+        /// Thrown when unable to deserialize the response
+        /// </exception>
+        /// <exception cref="ValidationException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        /// <exception cref="System.ArgumentNullException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        /// <return>
+        /// A response object containing the response body and response headers.
+        /// </return>
+        public async Task<HttpOperationResponse<IList<PositionMonitorResponse>>> ApiPositionlimitGetAllGetWithHttpMessagesAsync(string apiKey, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (apiKey == null)
+            {
+                throw new ValidationException(ValidationRules.CannotBeNull, "apiKey");
+            }
+            // Tracing
+            bool _shouldTrace = ServiceClientTracing.IsEnabled;
+            string _invocationId = null;
+            if (_shouldTrace)
+            {
+                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
+                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("apiKey", apiKey);
+                tracingParameters.Add("cancellationToken", cancellationToken);
+                ServiceClientTracing.Enter(_invocationId, this, "ApiPositionlimitGetAllGet", tracingParameters);
+            }
+            // Construct URL
+            var _baseUrl = BaseUri.AbsoluteUri;
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/positionlimit/GetAll").ToString();
+            // Create HTTP transport objects
+            var _httpRequest = new HttpRequestMessage();
+            HttpResponseMessage _httpResponse = null;
+            _httpRequest.Method = new HttpMethod("GET");
+            _httpRequest.RequestUri = new System.Uri(_url);
+            // Set Headers
+            if (apiKey != null)
+            {
+                if (_httpRequest.Headers.Contains("api-key"))
+                {
+                    _httpRequest.Headers.Remove("api-key");
+                }
+                _httpRequest.Headers.TryAddWithoutValidation("api-key", apiKey);
+            }
+
+
+            if (customHeaders != null)
+            {
+                foreach(var _header in customHeaders)
+                {
+                    if (_httpRequest.Headers.Contains(_header.Key))
+                    {
+                        _httpRequest.Headers.Remove(_header.Key);
+                    }
+                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
+                }
+            }
+
+            // Serialize Request
+            string _requestContent = null;
+            // Send Request
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
+            }
+            cancellationToken.ThrowIfCancellationRequested();
+            _httpResponse = await HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
+            }
+            HttpStatusCode _statusCode = _httpResponse.StatusCode;
+            cancellationToken.ThrowIfCancellationRequested();
+            string _responseContent = null;
+            if ((int)_statusCode != 200)
+            {
+                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
+                if (_httpResponse.Content != null) {
+                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                }
+                else {
+                    _responseContent = string.Empty;
+                }
+                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
+                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
+                if (_shouldTrace)
+                {
+                    ServiceClientTracing.Error(_invocationId, ex);
+                }
+                _httpRequest.Dispose();
+                if (_httpResponse != null)
+                {
+                    _httpResponse.Dispose();
+                }
+                throw ex;
+            }
+            // Create Result
+            var _result = new HttpOperationResponse<IList<PositionMonitorResponse>>();
+            _result.Request = _httpRequest;
+            _result.Response = _httpResponse;
+            // Deserialize Response
+            if ((int)_statusCode == 200)
+            {
+                _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                try
+                {
+                    _result.Body = SafeJsonConvert.DeserializeObject<IList<PositionMonitorResponse>>(_responseContent, DeserializationSettings);
+                }
+                catch (JsonException ex)
+                {
+                    _httpRequest.Dispose();
+                    if (_httpResponse != null)
+                    {
+                        _httpResponse.Dispose();
+                    }
+                    throw new SerializationException("Unable to deserialize the response.", _responseContent, ex);
+                }
+            }
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.Exit(_invocationId, _result);
+            }
+            return _result;
+        }
+
+        /// <summary>
+        /// Setting limits
+        /// </summary>
         /// <param name='apiKey'>
         /// API Token
         /// </param>
         /// <param name='model'>
+        /// PVaR concentration limit: 0 lower than SOFT lower than HARD lower than 1
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -2537,8 +2977,18 @@ namespace MarginTrading.RiskManagerClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse> ApiPvarconcentrationlimitPostWithHttpMessagesAsync(string apiKey, IList<PVaRConcentrationLimit> model = default(IList<PVaRConcentrationLimit>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse> ApiPvarconcentrationlimitPostWithHttpMessagesAsync(string apiKey, IList<PVaRConcentrationLimitModel> model = default(IList<PVaRConcentrationLimitModel>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
+            if (model != null)
+            {
+                foreach (var element in model)
+                {
+                    if (element != null)
+                    {
+                        element.Validate();
+                    }
+                }
+            }
             if (apiKey == null)
             {
                 throw new ValidationException(ValidationRules.CannotBeNull, "apiKey");
@@ -2641,6 +3091,9 @@ namespace MarginTrading.RiskManagerClient
             return _result;
         }
 
+        /// <summary>
+        /// Clearing the limit for given counterparty
+        /// </summary>
         /// <param name='apiKey'>
         /// API Token
         /// </param>
@@ -2778,8 +3231,15 @@ namespace MarginTrading.RiskManagerClient
             return _result;
         }
 
+        /// <summary>
+        /// Retrieves current state of concrete limit monitor.
+        /// </summary>
         /// <param name='apiKey'>
         /// API Token
+        /// </param>
+        /// <param name='counterPartyId'>
+        /// </param>
+        /// <param name='makerCounterPartyId'>
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -2802,7 +3262,7 @@ namespace MarginTrading.RiskManagerClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<IList<PVaRMonitor>>> ApiPvarlimitGetWithHttpMessagesAsync(string apiKey, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<PVaRConcentrationMonitorResponse>> ApiPvarconcentrationlimitGetByCounterpartyGetWithHttpMessagesAsync(string apiKey, string counterPartyId = default(string), string makerCounterPartyId = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (apiKey == null)
             {
@@ -2815,13 +3275,28 @@ namespace MarginTrading.RiskManagerClient
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("counterPartyId", counterPartyId);
+                tracingParameters.Add("makerCounterPartyId", makerCounterPartyId);
                 tracingParameters.Add("apiKey", apiKey);
                 tracingParameters.Add("cancellationToken", cancellationToken);
-                ServiceClientTracing.Enter(_invocationId, this, "ApiPvarlimitGet", tracingParameters);
+                ServiceClientTracing.Enter(_invocationId, this, "ApiPvarconcentrationlimitGetByCounterpartyGet", tracingParameters);
             }
             // Construct URL
             var _baseUrl = BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/pvarlimit").ToString();
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/pvarconcentrationlimit/GetByCounterparty").ToString();
+            List<string> _queryParameters = new List<string>();
+            if (counterPartyId != null)
+            {
+                _queryParameters.Add(string.Format("counterPartyId={0}", System.Uri.EscapeDataString(counterPartyId)));
+            }
+            if (makerCounterPartyId != null)
+            {
+                _queryParameters.Add(string.Format("makerCounterPartyId={0}", System.Uri.EscapeDataString(makerCounterPartyId)));
+            }
+            if (_queryParameters.Count > 0)
+            {
+                _url += "?" + string.Join("&", _queryParameters);
+            }
             // Create HTTP transport objects
             var _httpRequest = new HttpRequestMessage();
             HttpResponseMessage _httpResponse = null;
@@ -2889,7 +3364,7 @@ namespace MarginTrading.RiskManagerClient
                 throw ex;
             }
             // Create Result
-            var _result = new HttpOperationResponse<IList<PVaRMonitor>>();
+            var _result = new HttpOperationResponse<PVaRConcentrationMonitorResponse>();
             _result.Request = _httpRequest;
             _result.Response = _httpResponse;
             // Deserialize Response
@@ -2898,7 +3373,7 @@ namespace MarginTrading.RiskManagerClient
                 _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    _result.Body = SafeJsonConvert.DeserializeObject<IList<PVaRMonitor>>(_responseContent, DeserializationSettings);
+                    _result.Body = SafeJsonConvert.DeserializeObject<PVaRConcentrationMonitorResponse>(_responseContent, DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
@@ -2917,6 +3392,152 @@ namespace MarginTrading.RiskManagerClient
             return _result;
         }
 
+        /// <summary>
+        /// Retrieves current state of limit monitor collection. Gives all implicitly
+        /// set limits and all breached Default limits.
+        /// </summary>
+        /// <param name='apiKey'>
+        /// API Token
+        /// </param>
+        /// <param name='customHeaders'>
+        /// Headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="SerializationException">
+        /// Thrown when unable to deserialize the response
+        /// </exception>
+        /// <exception cref="ValidationException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        /// <exception cref="System.ArgumentNullException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        /// <return>
+        /// A response object containing the response body and response headers.
+        /// </return>
+        public async Task<HttpOperationResponse<IList<PVaRConcentrationMonitorResponse>>> ApiPvarconcentrationlimitGetAllGetWithHttpMessagesAsync(string apiKey, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (apiKey == null)
+            {
+                throw new ValidationException(ValidationRules.CannotBeNull, "apiKey");
+            }
+            // Tracing
+            bool _shouldTrace = ServiceClientTracing.IsEnabled;
+            string _invocationId = null;
+            if (_shouldTrace)
+            {
+                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
+                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("apiKey", apiKey);
+                tracingParameters.Add("cancellationToken", cancellationToken);
+                ServiceClientTracing.Enter(_invocationId, this, "ApiPvarconcentrationlimitGetAllGet", tracingParameters);
+            }
+            // Construct URL
+            var _baseUrl = BaseUri.AbsoluteUri;
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/pvarconcentrationlimit/GetAll").ToString();
+            // Create HTTP transport objects
+            var _httpRequest = new HttpRequestMessage();
+            HttpResponseMessage _httpResponse = null;
+            _httpRequest.Method = new HttpMethod("GET");
+            _httpRequest.RequestUri = new System.Uri(_url);
+            // Set Headers
+            if (apiKey != null)
+            {
+                if (_httpRequest.Headers.Contains("api-key"))
+                {
+                    _httpRequest.Headers.Remove("api-key");
+                }
+                _httpRequest.Headers.TryAddWithoutValidation("api-key", apiKey);
+            }
+
+
+            if (customHeaders != null)
+            {
+                foreach(var _header in customHeaders)
+                {
+                    if (_httpRequest.Headers.Contains(_header.Key))
+                    {
+                        _httpRequest.Headers.Remove(_header.Key);
+                    }
+                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
+                }
+            }
+
+            // Serialize Request
+            string _requestContent = null;
+            // Send Request
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
+            }
+            cancellationToken.ThrowIfCancellationRequested();
+            _httpResponse = await HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
+            }
+            HttpStatusCode _statusCode = _httpResponse.StatusCode;
+            cancellationToken.ThrowIfCancellationRequested();
+            string _responseContent = null;
+            if ((int)_statusCode != 200)
+            {
+                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
+                if (_httpResponse.Content != null) {
+                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                }
+                else {
+                    _responseContent = string.Empty;
+                }
+                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
+                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
+                if (_shouldTrace)
+                {
+                    ServiceClientTracing.Error(_invocationId, ex);
+                }
+                _httpRequest.Dispose();
+                if (_httpResponse != null)
+                {
+                    _httpResponse.Dispose();
+                }
+                throw ex;
+            }
+            // Create Result
+            var _result = new HttpOperationResponse<IList<PVaRConcentrationMonitorResponse>>();
+            _result.Request = _httpRequest;
+            _result.Response = _httpResponse;
+            // Deserialize Response
+            if ((int)_statusCode == 200)
+            {
+                _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                try
+                {
+                    _result.Body = SafeJsonConvert.DeserializeObject<IList<PVaRConcentrationMonitorResponse>>(_responseContent, DeserializationSettings);
+                }
+                catch (JsonException ex)
+                {
+                    _httpRequest.Dispose();
+                    if (_httpResponse != null)
+                    {
+                        _httpResponse.Dispose();
+                    }
+                    throw new SerializationException("Unable to deserialize the response.", _responseContent, ex);
+                }
+            }
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.Exit(_invocationId, _result);
+            }
+            return _result;
+        }
+
+        /// <summary>
+        /// Sets limits
+        /// </summary>
         /// <param name='apiKey'>
         /// API Token
         /// </param>
@@ -2940,7 +3561,7 @@ namespace MarginTrading.RiskManagerClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse> ApiPvarlimitPostWithHttpMessagesAsync(string apiKey, IList<PVaRLimit> model = default(IList<PVaRLimit>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse> ApiPvarlimitPostWithHttpMessagesAsync(string apiKey, IList<PVaRLimitModel> model = default(IList<PVaRLimitModel>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (apiKey == null)
             {
@@ -3044,6 +3665,9 @@ namespace MarginTrading.RiskManagerClient
             return _result;
         }
 
+        /// <summary>
+        /// Clears all limits for a given counterparty
+        /// </summary>
         /// <param name='apiKey'>
         /// API Token
         /// </param>
@@ -3174,6 +3798,10 @@ namespace MarginTrading.RiskManagerClient
             return _result;
         }
 
+        /// <summary>
+        /// Retrieves current state of limit monitor collection. Gives all implicitly
+        /// set limits and all breached Default limits.
+        /// </summary>
         /// <param name='apiKey'>
         /// API Token
         /// </param>
@@ -3198,7 +3826,149 @@ namespace MarginTrading.RiskManagerClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<IList<StDevCoeff>>> ApiSigmaGetWithHttpMessagesAsync(string apiKey, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<IList<PVaRMonitorResponse>>> ApiPvarlimitGetAllGetWithHttpMessagesAsync(string apiKey, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (apiKey == null)
+            {
+                throw new ValidationException(ValidationRules.CannotBeNull, "apiKey");
+            }
+            // Tracing
+            bool _shouldTrace = ServiceClientTracing.IsEnabled;
+            string _invocationId = null;
+            if (_shouldTrace)
+            {
+                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
+                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("apiKey", apiKey);
+                tracingParameters.Add("cancellationToken", cancellationToken);
+                ServiceClientTracing.Enter(_invocationId, this, "ApiPvarlimitGetAllGet", tracingParameters);
+            }
+            // Construct URL
+            var _baseUrl = BaseUri.AbsoluteUri;
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/pvarlimit/GetAll").ToString();
+            // Create HTTP transport objects
+            var _httpRequest = new HttpRequestMessage();
+            HttpResponseMessage _httpResponse = null;
+            _httpRequest.Method = new HttpMethod("GET");
+            _httpRequest.RequestUri = new System.Uri(_url);
+            // Set Headers
+            if (apiKey != null)
+            {
+                if (_httpRequest.Headers.Contains("api-key"))
+                {
+                    _httpRequest.Headers.Remove("api-key");
+                }
+                _httpRequest.Headers.TryAddWithoutValidation("api-key", apiKey);
+            }
+
+
+            if (customHeaders != null)
+            {
+                foreach(var _header in customHeaders)
+                {
+                    if (_httpRequest.Headers.Contains(_header.Key))
+                    {
+                        _httpRequest.Headers.Remove(_header.Key);
+                    }
+                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
+                }
+            }
+
+            // Serialize Request
+            string _requestContent = null;
+            // Send Request
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
+            }
+            cancellationToken.ThrowIfCancellationRequested();
+            _httpResponse = await HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
+            }
+            HttpStatusCode _statusCode = _httpResponse.StatusCode;
+            cancellationToken.ThrowIfCancellationRequested();
+            string _responseContent = null;
+            if ((int)_statusCode != 200)
+            {
+                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
+                if (_httpResponse.Content != null) {
+                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                }
+                else {
+                    _responseContent = string.Empty;
+                }
+                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
+                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
+                if (_shouldTrace)
+                {
+                    ServiceClientTracing.Error(_invocationId, ex);
+                }
+                _httpRequest.Dispose();
+                if (_httpResponse != null)
+                {
+                    _httpResponse.Dispose();
+                }
+                throw ex;
+            }
+            // Create Result
+            var _result = new HttpOperationResponse<IList<PVaRMonitorResponse>>();
+            _result.Request = _httpRequest;
+            _result.Response = _httpResponse;
+            // Deserialize Response
+            if ((int)_statusCode == 200)
+            {
+                _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                try
+                {
+                    _result.Body = SafeJsonConvert.DeserializeObject<IList<PVaRMonitorResponse>>(_responseContent, DeserializationSettings);
+                }
+                catch (JsonException ex)
+                {
+                    _httpRequest.Dispose();
+                    if (_httpResponse != null)
+                    {
+                        _httpResponse.Dispose();
+                    }
+                    throw new SerializationException("Unable to deserialize the response.", _responseContent, ex);
+                }
+            }
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.Exit(_invocationId, _result);
+            }
+            return _result;
+        }
+
+        /// <summary>
+        /// Track current values of sigma coefficients
+        /// </summary>
+        /// <param name='apiKey'>
+        /// API Token
+        /// </param>
+        /// <param name='customHeaders'>
+        /// Headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="SerializationException">
+        /// Thrown when unable to deserialize the response
+        /// </exception>
+        /// <exception cref="ValidationException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        /// <exception cref="System.ArgumentNullException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        /// <return>
+        /// A response object containing the response body and response headers.
+        /// </return>
+        public async Task<HttpOperationResponse<IList<StDevCoeffResponse>>> ApiSigmaGetWithHttpMessagesAsync(string apiKey, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (apiKey == null)
             {
@@ -3285,7 +4055,7 @@ namespace MarginTrading.RiskManagerClient
                 throw ex;
             }
             // Create Result
-            var _result = new HttpOperationResponse<IList<StDevCoeff>>();
+            var _result = new HttpOperationResponse<IList<StDevCoeffResponse>>();
             _result.Request = _httpRequest;
             _result.Response = _httpResponse;
             // Deserialize Response
@@ -3294,7 +4064,7 @@ namespace MarginTrading.RiskManagerClient
                 _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    _result.Body = SafeJsonConvert.DeserializeObject<IList<StDevCoeff>>(_responseContent, DeserializationSettings);
+                    _result.Body = SafeJsonConvert.DeserializeObject<IList<StDevCoeffResponse>>(_responseContent, DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
@@ -3313,6 +4083,9 @@ namespace MarginTrading.RiskManagerClient
             return _result;
         }
 
+        /// <summary>
+        /// Overriding sigma coefficiens
+        /// </summary>
         /// <param name='apiKey'>
         /// API Token
         /// </param>
@@ -3338,6 +4111,16 @@ namespace MarginTrading.RiskManagerClient
         /// </return>
         public async Task<HttpOperationResponse> ApiSigmaPostWithHttpMessagesAsync(string apiKey, IList<StDevCoeffOverrideModel> model = default(IList<StDevCoeffOverrideModel>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
+            if (model != null)
+            {
+                foreach (var element in model)
+                {
+                    if (element != null)
+                    {
+                        element.Validate();
+                    }
+                }
+            }
             if (apiKey == null)
             {
                 throw new ValidationException(ValidationRules.CannotBeNull, "apiKey");
@@ -3440,6 +4223,9 @@ namespace MarginTrading.RiskManagerClient
             return _result;
         }
 
+        /// <summary>
+        /// Cancel overriding of a sigma coefficient
+        /// </summary>
         /// <param name='apiKey'>
         /// API Token
         /// </param>
@@ -3570,6 +4356,9 @@ namespace MarginTrading.RiskManagerClient
             return _result;
         }
 
+        /// <summary>
+        /// GET Method
+        /// </summary>
         /// <param name='apiKey'>
         /// API Token
         /// </param>
@@ -3594,7 +4383,7 @@ namespace MarginTrading.RiskManagerClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<ISystemParameters>> ApiSystemParametersGetWithHttpMessagesAsync(string apiKey, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<SystemParametersResponse>> ApiSystemParametersGetWithHttpMessagesAsync(string apiKey, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (apiKey == null)
             {
@@ -3681,7 +4470,7 @@ namespace MarginTrading.RiskManagerClient
                 throw ex;
             }
             // Create Result
-            var _result = new HttpOperationResponse<ISystemParameters>();
+            var _result = new HttpOperationResponse<SystemParametersResponse>();
             _result.Request = _httpRequest;
             _result.Response = _httpResponse;
             // Deserialize Response
@@ -3690,7 +4479,186 @@ namespace MarginTrading.RiskManagerClient
                 _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    _result.Body = SafeJsonConvert.DeserializeObject<ISystemParameters>(_responseContent, DeserializationSettings);
+                    _result.Body = SafeJsonConvert.DeserializeObject<SystemParametersResponse>(_responseContent, DeserializationSettings);
+                }
+                catch (JsonException ex)
+                {
+                    _httpRequest.Dispose();
+                    if (_httpResponse != null)
+                    {
+                        _httpResponse.Dispose();
+                    }
+                    throw new SerializationException("Unable to deserialize the response.", _responseContent, ex);
+                }
+            }
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.Exit(_invocationId, _result);
+            }
+            return _result;
+        }
+
+        /// <summary>
+        /// Fill positions special fields if they are empty.
+        /// </summary>
+        /// <param name='apiKey'>
+        /// API Token
+        /// </param>
+        /// <param name='tradingPositions'>
+        /// </param>
+        /// <param name='customHeaders'>
+        /// Headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="SerializationException">
+        /// Thrown when unable to deserialize the response
+        /// </exception>
+        /// <exception cref="ValidationException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        /// <exception cref="System.ArgumentNullException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        /// <return>
+        /// A response object containing the response body and response headers.
+        /// </return>
+        public async Task<HttpOperationResponse<object>> ApiTradingpositionPostWithHttpMessagesAsync(string apiKey, IList<TradingPosition> tradingPositions = default(IList<TradingPosition>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (tradingPositions != null)
+            {
+                foreach (var element in tradingPositions)
+                {
+                    if (element != null)
+                    {
+                        element.Validate();
+                    }
+                }
+            }
+            if (apiKey == null)
+            {
+                throw new ValidationException(ValidationRules.CannotBeNull, "apiKey");
+            }
+            // Tracing
+            bool _shouldTrace = ServiceClientTracing.IsEnabled;
+            string _invocationId = null;
+            if (_shouldTrace)
+            {
+                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
+                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("tradingPositions", tradingPositions);
+                tracingParameters.Add("apiKey", apiKey);
+                tracingParameters.Add("cancellationToken", cancellationToken);
+                ServiceClientTracing.Enter(_invocationId, this, "ApiTradingpositionPost", tracingParameters);
+            }
+            // Construct URL
+            var _baseUrl = BaseUri.AbsoluteUri;
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "api/tradingposition").ToString();
+            // Create HTTP transport objects
+            var _httpRequest = new HttpRequestMessage();
+            HttpResponseMessage _httpResponse = null;
+            _httpRequest.Method = new HttpMethod("POST");
+            _httpRequest.RequestUri = new System.Uri(_url);
+            // Set Headers
+            if (apiKey != null)
+            {
+                if (_httpRequest.Headers.Contains("api-key"))
+                {
+                    _httpRequest.Headers.Remove("api-key");
+                }
+                _httpRequest.Headers.TryAddWithoutValidation("api-key", apiKey);
+            }
+
+
+            if (customHeaders != null)
+            {
+                foreach(var _header in customHeaders)
+                {
+                    if (_httpRequest.Headers.Contains(_header.Key))
+                    {
+                        _httpRequest.Headers.Remove(_header.Key);
+                    }
+                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
+                }
+            }
+
+            // Serialize Request
+            string _requestContent = null;
+            if(tradingPositions != null)
+            {
+                _requestContent = SafeJsonConvert.SerializeObject(tradingPositions, SerializationSettings);
+                _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json-patch+json; charset=utf-8");
+            }
+            // Send Request
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
+            }
+            cancellationToken.ThrowIfCancellationRequested();
+            _httpResponse = await HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
+            }
+            HttpStatusCode _statusCode = _httpResponse.StatusCode;
+            cancellationToken.ThrowIfCancellationRequested();
+            string _responseContent = null;
+            if ((int)_statusCode != 200 && (int)_statusCode != 400)
+            {
+                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
+                if (_httpResponse.Content != null) {
+                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                }
+                else {
+                    _responseContent = string.Empty;
+                }
+                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
+                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
+                if (_shouldTrace)
+                {
+                    ServiceClientTracing.Error(_invocationId, ex);
+                }
+                _httpRequest.Dispose();
+                if (_httpResponse != null)
+                {
+                    _httpResponse.Dispose();
+                }
+                throw ex;
+            }
+            // Create Result
+            var _result = new HttpOperationResponse<object>();
+            _result.Request = _httpRequest;
+            _result.Response = _httpResponse;
+            // Deserialize Response
+            if ((int)_statusCode == 200)
+            {
+                _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                try
+                {
+                    _result.Body = SafeJsonConvert.DeserializeObject<IList<TradingPosition>>(_responseContent, DeserializationSettings);
+                }
+                catch (JsonException ex)
+                {
+                    _httpRequest.Dispose();
+                    if (_httpResponse != null)
+                    {
+                        _httpResponse.Dispose();
+                    }
+                    throw new SerializationException("Unable to deserialize the response.", _responseContent, ex);
+                }
+            }
+            // Deserialize Response
+            if ((int)_statusCode == 400)
+            {
+                _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                try
+                {
+                    _result.Body = SafeJsonConvert.DeserializeObject<string>(_responseContent, DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {

@@ -8,20 +8,20 @@ namespace MarginTrading.RiskManagerClient.Models
     using Newtonsoft.Json;
     using System.Linq;
 
-    public partial class MeanCoeff
+    public partial class StDevCoeffResponse
     {
         /// <summary>
-        /// Initializes a new instance of the MeanCoeff class.
+        /// Initializes a new instance of the StDevCoeffResponse class.
         /// </summary>
-        public MeanCoeff()
+        public StDevCoeffResponse()
         {
           CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the MeanCoeff class.
+        /// Initializes a new instance of the StDevCoeffResponse class.
         /// </summary>
-        public MeanCoeff(string asset = default(string), double? calculatedValue = default(double?), bool? overridden = default(bool?), double? overriddenValue = default(double?))
+        public StDevCoeffResponse(double calculatedValue, bool overridden, string asset = default(string), double? overriddenValue = default(double?))
         {
             Asset = asset;
             CalculatedValue = calculatedValue;
@@ -43,17 +43,27 @@ namespace MarginTrading.RiskManagerClient.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "calculatedValue")]
-        public double? CalculatedValue { get; set; }
+        public double CalculatedValue { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "overridden")]
-        public bool? Overridden { get; set; }
+        public bool Overridden { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "overriddenValue")]
         public double? OverriddenValue { get; set; }
 
+        /// <summary>
+        /// Validate the object.
+        /// </summary>
+        /// <exception cref="Microsoft.Rest.ValidationException">
+        /// Thrown if validation fails
+        /// </exception>
+        public virtual void Validate()
+        {
+            //Nothing to validate
+        }
     }
 }

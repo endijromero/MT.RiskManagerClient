@@ -8,6 +8,9 @@ namespace MarginTrading.RiskManagerClient.Models
     using Newtonsoft.Json;
     using System.Linq;
 
+    /// <summary>
+    /// API DTO for setting overriding mean coefficient value
+    /// </summary>
     public partial class MeanCoeffOverrideModel
     {
         /// <summary>
@@ -21,7 +24,9 @@ namespace MarginTrading.RiskManagerClient.Models
         /// <summary>
         /// Initializes a new instance of the MeanCoeffOverrideModel class.
         /// </summary>
-        public MeanCoeffOverrideModel(string asset = default(string), double? value = default(double?))
+        /// <param name="value">Coefficient value</param>
+        /// <param name="asset">Instrument identifier</param>
+        public MeanCoeffOverrideModel(double value, string asset = default(string))
         {
             Asset = asset;
             Value = value;
@@ -34,14 +39,26 @@ namespace MarginTrading.RiskManagerClient.Models
         partial void CustomInit();
 
         /// <summary>
+        /// Gets or sets instrument identifier
         /// </summary>
         [JsonProperty(PropertyName = "asset")]
         public string Asset { get; set; }
 
         /// <summary>
+        /// Gets or sets coefficient value
         /// </summary>
         [JsonProperty(PropertyName = "value")]
-        public double? Value { get; set; }
+        public double Value { get; set; }
 
+        /// <summary>
+        /// Validate the object.
+        /// </summary>
+        /// <exception cref="Microsoft.Rest.ValidationException">
+        /// Thrown if validation fails
+        /// </exception>
+        public virtual void Validate()
+        {
+            //Nothing to validate
+        }
     }
 }

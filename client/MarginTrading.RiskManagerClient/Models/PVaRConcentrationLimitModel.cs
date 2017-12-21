@@ -8,20 +8,22 @@ namespace MarginTrading.RiskManagerClient.Models
     using Newtonsoft.Json;
     using System.Linq;
 
-    public partial class PVaRConcentrationLimit
+    public partial class PVaRConcentrationLimitModel
     {
         /// <summary>
-        /// Initializes a new instance of the PVaRConcentrationLimit class.
+        /// Initializes a new instance of the PVaRConcentrationLimitModel
+        /// class.
         /// </summary>
-        public PVaRConcentrationLimit()
+        public PVaRConcentrationLimitModel()
         {
           CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the PVaRConcentrationLimit class.
+        /// Initializes a new instance of the PVaRConcentrationLimitModel
+        /// class.
         /// </summary>
-        public PVaRConcentrationLimit(string traderCounterPartyId = default(string), string makerCounterPartyId = default(string), double? treshold = default(double?), double? softLimitPercentage = default(double?), double? hardLimitPercentage = default(double?))
+        public PVaRConcentrationLimitModel(double treshold, string traderCounterPartyId = default(string), string makerCounterPartyId = default(string), double? softLimitPercentage = default(double?), double? hardLimitPercentage = default(double?))
         {
             TraderCounterPartyId = traderCounterPartyId;
             MakerCounterPartyId = makerCounterPartyId;
@@ -49,7 +51,7 @@ namespace MarginTrading.RiskManagerClient.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "treshold")]
-        public double? Treshold { get; set; }
+        public double Treshold { get; set; }
 
         /// <summary>
         /// </summary>
@@ -61,5 +63,15 @@ namespace MarginTrading.RiskManagerClient.Models
         [JsonProperty(PropertyName = "hardLimitPercentage")]
         public double? HardLimitPercentage { get; set; }
 
+        /// <summary>
+        /// Validate the object.
+        /// </summary>
+        /// <exception cref="Microsoft.Rest.ValidationException">
+        /// Thrown if validation fails
+        /// </exception>
+        public virtual void Validate()
+        {
+            //Nothing to validate
+        }
     }
 }

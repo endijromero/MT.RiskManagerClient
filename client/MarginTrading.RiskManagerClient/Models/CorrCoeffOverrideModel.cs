@@ -8,6 +8,9 @@ namespace MarginTrading.RiskManagerClient.Models
     using Newtonsoft.Json;
     using System.Linq;
 
+    /// <summary>
+    /// API DTO for setting overriding correlation coefficient value
+    /// </summary>
     public partial class CorrCoeffOverrideModel
     {
         /// <summary>
@@ -21,7 +24,10 @@ namespace MarginTrading.RiskManagerClient.Models
         /// <summary>
         /// Initializes a new instance of the CorrCoeffOverrideModel class.
         /// </summary>
-        public CorrCoeffOverrideModel(string assetX = default(string), string assetY = default(string), double? value = default(double?))
+        /// <param name="value">Coefficient value</param>
+        /// <param name="assetX">Correlation matrix X coordiante</param>
+        /// <param name="assetY">Correlation matrix Y coordinate</param>
+        public CorrCoeffOverrideModel(double value, string assetX = default(string), string assetY = default(string))
         {
             AssetX = assetX;
             AssetY = assetY;
@@ -35,19 +41,32 @@ namespace MarginTrading.RiskManagerClient.Models
         partial void CustomInit();
 
         /// <summary>
+        /// Gets or sets correlation matrix X coordiante
         /// </summary>
         [JsonProperty(PropertyName = "assetX")]
         public string AssetX { get; set; }
 
         /// <summary>
+        /// Gets or sets correlation matrix Y coordinate
         /// </summary>
         [JsonProperty(PropertyName = "assetY")]
         public string AssetY { get; set; }
 
         /// <summary>
+        /// Gets or sets coefficient value
         /// </summary>
         [JsonProperty(PropertyName = "value")]
-        public double? Value { get; set; }
+        public double Value { get; set; }
 
+        /// <summary>
+        /// Validate the object.
+        /// </summary>
+        /// <exception cref="Microsoft.Rest.ValidationException">
+        /// Thrown if validation fails
+        /// </exception>
+        public virtual void Validate()
+        {
+            //Nothing to validate
+        }
     }
 }
