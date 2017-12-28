@@ -31,32 +31,7 @@ namespace MarginTrading.RiskManagerClient
         /// Gets or sets json deserialization settings.
         /// </summary>
         public JsonSerializerSettings DeserializationSettings { get; private set; }
-
-        /// <summary>
-        /// Initializes a new instance of the RiskManagementApi class.
-        /// </summary>
-        /// <param name='handlers'>
-        /// Optional. The delegating handlers to add to the http client pipeline.
-        /// </param>
-        public RiskManagementApi(params DelegatingHandler[] handlers) : base(handlers)
-        {
-            Initialize();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the RiskManagementApi class.
-        /// </summary>
-        /// <param name='rootHandler'>
-        /// Optional. The http client handler used to handle http transport.
-        /// </param>
-        /// <param name='handlers'>
-        /// Optional. The delegating handlers to add to the http client pipeline.
-        /// </param>
-        public RiskManagementApi(HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : base(rootHandler, handlers)
-        {
-            Initialize();
-        }
-
+        
         /// <summary>
         /// Initializes a new instance of the RiskManagementApi class.
         /// </summary>
@@ -69,8 +44,9 @@ namespace MarginTrading.RiskManagerClient
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        public RiskManagementApi(System.Uri baseUri, params DelegatingHandler[] handlers) : this(handlers)
+        public RiskManagementApi(System.Uri baseUri, params DelegatingHandler[] handlers) : base(handlers)
         {
+            Initialize();
             if (baseUri == null)
             {
                 throw new System.ArgumentNullException("baseUri");
@@ -93,8 +69,9 @@ namespace MarginTrading.RiskManagerClient
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        public RiskManagementApi(System.Uri baseUri, HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : this(rootHandler, handlers)
+        public RiskManagementApi(System.Uri baseUri, HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : base(rootHandler, handlers)
         {
+            Initialize();
             if (baseUri == null)
             {
                 throw new System.ArgumentNullException("baseUri");
